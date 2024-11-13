@@ -14,7 +14,6 @@ import { ExcludesNullish } from "@/types/index"
 import DeleteProjectModal from '@/components/projects/DeleteProjectModal'
 
 export default function DashboardView() {
-
   const navigate = useNavigate()
   const { setBreadcrumbs } = useBreadcrumb()
 
