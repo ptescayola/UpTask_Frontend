@@ -21,7 +21,9 @@ export default function Card({title, statusTag, content, actions, onClick}: Card
         </div>
         <div className="flex flex-row items-center gap-3">{actions}</div>
       </div>
-      <div className="text-f1-foreground-secondary flex flex-col items-stretch gap-2 max-w-fit">{content}</div>
+      {content && (
+        <div className="text-f1-foreground-secondary flex flex-col items-stretch gap-2 max-w-fit">{content}</div>
+      )}
     </div>
   )
 }

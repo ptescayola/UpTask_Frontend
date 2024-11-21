@@ -8,8 +8,11 @@ import { formatTimeAgo } from '@/utils/index'
 import { TaskStatus } from '@/types/index'
 import { statusTranslations } from '@/locales/en'
 import Notification from '@/components/shared/Notification'
+import { useTranslation } from 'react-i18next'
 
 export default function TaskModalDetails() {
+
+  const { t } = useTranslation()
   const params = useParams()
   const projectId = params.projectId!
   const navigate = useNavigate()
@@ -62,9 +65,9 @@ export default function TaskModalDetails() {
         onClose={() => navigate(location.pathname, {replace: true}) }
       >
         <div className='space-y-2'>
-          <label className='font-bold'>Status</label>
+          <label className='font-bold'>{t('status')}</label>
           <Select
-            placeholder="Change status"
+            placeholder={t('change_status')}
             value={data.status}
             options={
               Object.entries(statusTranslations).map(([key, value]) => (
@@ -80,22 +83,23 @@ export default function TaskModalDetails() {
 
         {data.completedBy.length && (
           <>
-            <p className='mt-3'>Change History</p>
-            <ul className='mt-3'>
+            <p className='mt-3'>{t('change_history')}</p>
+            <div className='mt-3'>
               {data.completedBy.map((activityLog) => (
-                <li key={activityLog._id}>
-                  <span className='font-bold text-slate-600'>
-                      {statusTranslations[activityLog.status]}
-                  </span>{' '} by: {activityLog.user.name}
-                </li>
+                <p key={activityLog._id}>
+                  {t('status_change_by', {
+                    status: statusTranslations[activityLog.status],
+                    name:  activityLog.user.name
+                  })}
+                </p>
               ))}
-            </ul>
+            </div>
           </>
         )}
 
-        <div className="flex flex-row-reverse justify-between pt-4 text-f1-foreground-secondary">
-          <p className='text-sm'>Created {formatTimeAgo(data.createdAt)}</p>
-          <p className='text-sm'>Updated {formatTimeAgo(data.updatedAt)}</p>
+        <div className="flex justify-between pt-4 text-f1-foreground-secondary">
+          <p className='text-sm'>{t('created_at', {date: formatTimeAgo(data.createdAt)})}</p>
+          <p className='text-sm'>{t('updated_at', {date: formatTimeAgo(data.updatedAt)})}</p>
         </div>
       </Dialog>
     </>

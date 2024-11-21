@@ -1,4 +1,7 @@
+import i18next from 'i18next';
+
 export function formatTimeAgo(isoString: string): string {
+  const t = i18next.t.bind(i18next)
   const date = new Date(isoString)
   const now = new Date()
 
@@ -8,23 +11,22 @@ export function formatTimeAgo(isoString: string): string {
   const days = Math.floor(hours / 24)
   const months = Math.floor(days / 30)
   const years = Math.floor(months / 12)
+  const timeUnits = [
+    { unit: 'year', value: years },
+    { unit: 'month', value: months },
+    { unit: 'day', value: days },
+    { unit: 'hour', value: hours },
+    { unit: 'minute', value: minutes },
+    { unit: 'second', value: seconds },
+  ]
 
-  if (years > 0) {
-    return `${years} year${years > 1 ? 's' : ''} ago`
+  for (const { unit, value } of timeUnits) {
+    if (value > 0) {
+      return t('time_ago', {value, unit: t(`unit.${unit}${value > 1 ? '_plural' : ''}`)})
+    }
   }
-  if (months > 0) {
-    return `${months} month${months > 1 ? 's' : ''} ago`
-  }
-  if (days > 0) {
-    return `${days} day${days > 1 ? 's' : ''} ago`
-  }
-  if (hours > 0) {
-    return `${hours} hour${hours > 1 ? 's' : ''} ago`
-  }
-  if (minutes > 0) {
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`
-  }
-  return `${seconds} second${seconds > 1 ? 's' : ''} ago`
+
+  return t('time_ago', {value: 0, unit: t('unit.second')})
 }
 
 export function formatDate(isoString: string): string {

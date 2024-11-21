@@ -3,6 +3,7 @@ import { z } from 'zod'
 /** Auth & Users */
 const authSchema = z.object({
   name: z.string(),
+  lastname: z.string(),
   email: z.string().email(),
   current_password: z.string(),
   password: z.string(),
@@ -12,7 +13,7 @@ const authSchema = z.object({
 
 type Auth = z.infer<typeof authSchema>
 export type UserLoginForm = Pick<Auth, 'email' | 'password'>
-export type UserRegistrationForm = Pick<Auth, 'name' | 'email' | 'password' | 'password_confirmation'>
+export type UserRegistrationForm = Pick<Auth, 'name' | 'lastname' | 'email' | 'password' | 'password_confirmation'>
 export type RequestConfirmationCodeForm = Pick<Auth, 'email'>
 export type ForgotPasswordForm = Pick<Auth, 'email'>
 export type NewPasswordForm = Pick<Auth, 'password' | 'password_confirmation'>
@@ -23,12 +24,13 @@ export type CheckPasswordForm = Pick<Auth, 'password'>
 /** Users */
 export const userSchema = authSchema.pick({
   name: true,
+  lastname: true,
   email: true
 }).extend({
   _id: z.string()
 })
 export type User = z.infer<typeof userSchema>
-export type UserProfileForm = Pick<User, 'name' | 'email'>
+export type UserProfileForm = Pick<User, 'name' | 'lastname' | 'email'>
 
 /** Notes */
 export const noteSchema = z.object({
@@ -80,6 +82,7 @@ export const projectSchema = z.object({
   _id: z.string(),
   projectName: z.string(),
   clientName: z.string(),
+  clientUrl: z.string(),
   description: z.string(),
   manager: z.string(userSchema.pick({_id: true})),
   tasks: z.array(taskProjectSchema),
@@ -90,6 +93,7 @@ export const dashboardProjectSchema = z.array(
     _id: true,
     projectName: true,
     clientName: true,
+    clientUrl: true,
     description: true,
     manager: true
   })
@@ -97,10 +101,11 @@ export const dashboardProjectSchema = z.array(
 export const editProjectSchema = projectSchema.pick({
   projectName: true,
   clientName: true,
+  clientUrl: true,
   description: true
 })
 export type Project = z.infer<typeof projectSchema>
-export type ProjectFormData = Pick<Project, 'clientName' | 'projectName' | 'description'>
+export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'clientUrl'| 'description'>
 
 /** Team */
 const teamMemberSchema = userSchema.pick({

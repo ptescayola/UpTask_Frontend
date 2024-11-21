@@ -7,6 +7,7 @@ import type { User } from '@/types/index'
 import { Person, Folder, Exit } from '@factorialco/factorial-one/icons/app'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 type HeaderProps = {
   user: User
@@ -14,6 +15,7 @@ type HeaderProps = {
 
 export default function Header({user}: HeaderProps) {
 
+  const { t } = useTranslation()
   const { breadcrumbs} = useBreadcrumb()
   const navigate = useNavigate()
 
@@ -29,7 +31,7 @@ export default function Header({user}: HeaderProps) {
         module={{
           href: '/',
           icon: Workflows,
-          name: 'Up Task'
+          name: t('company.name')
         }}
         breadcrumbs={breadcrumbs}
       />
@@ -41,7 +43,7 @@ export default function Header({user}: HeaderProps) {
           <MenuButton>
             <PersonAvatar
               firstName={user.name}
-              lastName=""
+              lastName={user.lastname}
               size="medium"
             />
           </MenuButton>
@@ -61,17 +63,17 @@ export default function Header({user}: HeaderProps) {
                     title: "Root",
                     items: [
                       {
-                        label: "Profile",
+                        label: t('profile'),
                         icon: Person,
                         onClick: () => navigate('/profile')
                       },
                       {
-                        label: "Projects",
+                        label: t('projects'),
                         icon: Folder,
                         onClick: () => navigate('/')
                       },
                       {
-                        label: "Log out",
+                        label: t('log_out'),
                         icon: Exit,
                         onClick: () => logout()
                       }

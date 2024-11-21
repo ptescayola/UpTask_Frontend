@@ -9,9 +9,11 @@ import { Button } from '@factorialco/factorial-one'
 import type { TeamMember } from '@/types/index'
 import { Delete } from '@factorialco/factorial-one/icons/app'
 import Card from '@/components/shared/Card'
+import { useTranslation } from 'react-i18next'
 
 export default function ProjectTeamView() {
 
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const params = useParams()
   const projectId = params.projectId!
@@ -38,17 +40,17 @@ export default function ProjectTeamView() {
   if (isError) return <Navigate to={'/404'} />
   if (data) return (
     <>
-      <div className='flex flex-row-reverse justify-between'>
-        <h1 className="text-2xl text-f1-background-bold">Team manager</h1>
+      <div className='flex justify-between'>
+        <h1 className="text-2xl text-f1-background-bold">{t('team_manager')}</h1>
 
         <div className='flex gap-2'>
           <Button
-            label="Add collaborator"
+            label={t('add_collaborator')}
             onClick={() => navigate(location.pathname + '?addMember=true')}
             size="lg"
           />
           <Button
-            label="Cancel"
+            label={t('cancel')}
             onClick={() => navigate(`/projects/${projectId}`)}
             variant="neutral"
             size="lg"
@@ -75,7 +77,7 @@ export default function ProjectTeamView() {
           />
         ))
       ) : (
-        <p className='text-center py-20'>There are no members in this team</p>
+        <p className='text-center py-20'>{t('no_members_team')}</p>
       )}
 
       <AddMemberModal />

@@ -6,8 +6,11 @@ import { confirmAccount } from '@/api/AuthAPI'
 import { toast } from 'react-toastify'
 import Notification from '@/components/shared/Notification'
 import { Link } from '@factorialco/factorial-one'
+import { useTranslation } from 'react-i18next'
 
 export default function ConfirmAccountView() {
+
+  const { t } = useTranslation()
   const [token, setToken] = useState<ConfirmToken['token']>('')
 
   const { mutate } = useMutation({
@@ -25,11 +28,11 @@ export default function ConfirmAccountView() {
 
   return (
     <>
-      <h1 className="text-2xl text-f1-background-bold">Confirm your account</h1>
+      <h1 className="text-2xl text-f1-background-bold">{t('confirm_account')}</h1>
 
       <form className="space-y-2">
         <label className="text-sm font-medium text-center block">
-          6 digit code
+          {t('6_digit_code')}
         </label>
         <div className="flex justify-center gap-2">
           <PinInput value={token} onChange={handleChange} onComplete={handleComplete}>
@@ -45,7 +48,7 @@ export default function ConfirmAccountView() {
 
       <div className='text-center'>
         <Link href={'/auth/request-code'}>
-          Request new code
+          {t('request_new_code')}
         </Link>
       </div>
     </>

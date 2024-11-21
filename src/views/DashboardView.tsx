@@ -12,8 +12,11 @@ import { useAuth } from '@/hooks/useAuth'
 import { isManager } from '@/utils/policies'
 import { ExcludesNullish } from "@/types/index"
 import DeleteProjectModal from '@/components/projects/DeleteProjectModal'
+import { useTranslation } from 'react-i18next'
 
 export default function DashboardView() {
+
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { setBreadcrumbs } = useBreadcrumb()
 
@@ -31,15 +34,19 @@ export default function DashboardView() {
   if (data && user) return (
     <>
       {!!data.length && (
-        <div className='flex flex-row-reverse justify-between'>
+        <div className='flex justify-between'>
           <div>
-            <h1 className="text-2xl text-f1-background-bold">Projects</h1>
-            <p className="text-lg text-f1-foreground-secondary">Manage your projects</p>
+            <h1 className="text-2xl text-f1-background-bold">
+              {t('projects')}
+            </h1>
+            <p className="text-lg text-f1-foreground-secondary">
+              {t('manage_projects')}
+            </p>
           </div>
           <nav>
             <Button
               icon={Add}
-              label="New Project"
+              label={t('new_project')}
               onClick={() => navigate('/projects/create')}
               variant="default"
               size="lg"
@@ -56,8 +63,8 @@ export default function DashboardView() {
               title={project.projectName}
               statusTag={
                 isManager(project.manager, user._id)
-                   ? <StatusTag text="Manager" variant="warning" />
-                   : <StatusTag text="Collaborator" variant="info" />
+                   ? <StatusTag text={t('manager')} variant="warning" />
+                   : <StatusTag text={t('collaborator')} variant="info" />
               }
               content={
                 <>
@@ -65,12 +72,15 @@ export default function DashboardView() {
                     <CompanyTag
                       companyImageUrl="https://avatars.githubusercontent.com/u/21041797?s=200&v=4"
                       companyName={project.clientName}
+                      onClick={(e: React.MouseEvent) => {e.stopPropagation(); window.open(project.clientUrl, '_blank', 'noopener,noreferrer')}}
                     />
                   </div>
-  
-                  <p className="text-lg mt-4">
-                    {project.description}
-                  </p>
+
+                  { project.description && (
+                    <p className="text-lg mt-4">
+                      {project.description}
+                    </p>
+                  )}
                 </>
               }
               actions={
@@ -94,17 +104,17 @@ export default function DashboardView() {
                             title: "Root",
                             items: [
                               {
-                                label: "View",
+                                label: t('view'),
                                 icon: EyeVisible,
                                 href: `/projects/${project._id}`
                               },
                               isManager(project.manager, user._id) && {
-                                label: "Edit",
+                                label: t('edit'),
                                 icon: Pencil,
                                 href: `/projects/${project._id}/edit`
                               },
                               isManager(project.manager, user._id) && {
-                                label: "Delete",
+                                label: t('delete'),
                                 icon: Delete,
                                 onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(location.pathname + `?deleteProject=${project._id}`)}
                               }
@@ -123,9 +133,9 @@ export default function DashboardView() {
         </div>
       ) : (
         <WidgetEmptyState
-          title="Welcome"
-          content="Agile project management tool used by teams to plan, track, release and support world-class software with confidence."
-          buttonLabel="Create your first project"
+          title={t('welcome')}
+          content={t('welcome_description')}
+          buttonLabel={t('welcome_action')}
           icon={Coffee}
           buttonAction={() => navigate('/projects/create')}
         />

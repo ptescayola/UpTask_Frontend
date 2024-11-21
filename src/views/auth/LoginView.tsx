@@ -8,9 +8,11 @@ import { toast } from 'react-toastify'
 import { Input } from '@factorialco/factorial-one/dist/experimental'
 import { Button, Link } from '@factorialco/factorial-one'
 import Notification from '@/components/shared/Notification'
+import { useTranslation } from 'react-i18next'
 
 export default function LoginView() {
 
+  const { t } = useTranslation()
   const initialValues: UserLoginForm = {
     email: '',
     password: '',
@@ -32,7 +34,9 @@ export default function LoginView() {
 
   return (
     <>
-      <h1 className="text-2xl text-f1-background-bold">Log in</h1>
+      <h1 className="text-2xl text-f1-background-bold">
+        {t('login')}
+      </h1>
 
       <form
         className="space-y-2"
@@ -40,13 +44,13 @@ export default function LoginView() {
       >
         <div className="space-y-2">
           <Input
-            placeholder="Email"
+            placeholder={t('email.label')}
             type="email"
             {...register("email", {
-              required: "Required",
+              required: t('field.required'),
               pattern: {
                 value: /\S+@\S+\.\S+/,
-                message: "Email not valid",
+                message: t('email.invalid'),
               }
             })}
           />
@@ -58,10 +62,10 @@ export default function LoginView() {
 
         <div className="space-y-2">
           <Input
-            placeholder="Password"
+            placeholder={t('password.label')}
             type="password"
             {...register("password", {
-              required: "Required"
+              required: t('field.required')
             })}
           />
 
@@ -70,13 +74,15 @@ export default function LoginView() {
           )}
         
         <div className='text-right'>
-          <Link href='/auth/forgot-password'>Forgot your password?</Link>
+          <Link href='/auth/forgot-password'>
+            {t('forgot_password')}
+          </Link>
         </div>
         </div>
         
         <div className='AuthButton'>
           <Button
-            label="Sign in"
+            label={t('sign_in')}
             variant="default"
             size="lg"
             onClick={(e) => {e.preventDefault(); handleSubmit(handleLogin)()}}
@@ -85,7 +91,7 @@ export default function LoginView() {
       </form>
       
       <div className="text-center">
-        You do not have an account? <Link href='/auth/register'>Get started now</Link>
+        {t('not_have_account')}<Link href='/auth/register'>{t('get_started')}</Link>
       </div>
     </>
   )

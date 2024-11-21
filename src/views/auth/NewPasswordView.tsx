@@ -6,9 +6,11 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import Notification from '@/components/shared/Notification'
 import { ConfirmToken } from '@/types/index'
+import { useTranslation } from 'react-i18next'
 
 export default function NewPasswordView() {
 
+  const { t } = useTranslation()
   const [searchParams] = useSearchParams()
 
   const token = searchParams.get('token') as ConfirmToken['token']
@@ -22,14 +24,15 @@ export default function NewPasswordView() {
 
   useEffect(() => {
     if (token) {
-      console.log('validate token')
       mutate({token})
     }
   }, [])
 
   return (
     <>
-      <h1 className="text-2xl text-f1-background-bold">Reset Password</h1>
+      <h1 className="text-2xl text-f1-background-bold">
+        {t('reset_password')}
+      </h1>
 
       <NewPasswordForm token={token} />
     </>

@@ -7,6 +7,7 @@ import { updateProject } from '@/api/ProjectAPI'
 import { toast } from 'react-toastify'
 import { Button } from '@factorialco/factorial-one'
 import Notification from '@/components/shared/Notification'
+import { useTranslation } from 'react-i18next'
 
 type EditProjectFormProps = {
   data: ProjectFormData
@@ -15,10 +16,12 @@ type EditProjectFormProps = {
 
 export default function EditProjectForm({data, projectId} : EditProjectFormProps) {
 
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const {register, handleSubmit, formState: {errors}} = useForm({defaultValues: {
     projectName: data.projectName,
     clientName: data.clientName,
+    clientUrl: data.clientUrl,
     description: data.description
   }})
   
@@ -46,14 +49,14 @@ export default function EditProjectForm({data, projectId} : EditProjectFormProps
 
   return (
     <div className="space-y-2">
-      <div className='flex flex-row-reverse justify-between'>
+      <div className='flex justify-between'>
         <div>
-          <h1 className="text-2xl text-f1-background-bold">Edit Project</h1>
-          <p className="text-lg text-f1-foreground-secondary">Please complete the form with your project details to proceed.</p>
+          <h1 className="text-2xl text-f1-background-bold">{t('edit_project')}</h1>
+          <p className="text-lg text-f1-foreground-secondary">{t('edit_project_description')}</p>
         </div>
         <nav>
           <Button
-            label="Cancel"
+            label={t('cancel')}
             onClick={() => navigate('/')}
             variant="neutral"
             size="lg"
@@ -71,7 +74,7 @@ export default function EditProjectForm({data, projectId} : EditProjectFormProps
         />
 
         <Button
-          label="Update project"
+          label={t('update')}
           variant="default"
           size="lg"
           onClick={(e) => {e.preventDefault(); handleSubmit(handleForm)()}}

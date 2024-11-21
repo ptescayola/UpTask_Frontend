@@ -10,8 +10,10 @@ import { Delete } from '@factorialco/factorial-one/icons/app'
 import { toast } from 'react-toastify'
 import { Button } from '@factorialco/factorial-one'
 import Notification from '@/components/shared/Notification'
+import { useTranslation } from 'react-i18next'
 
 export default function DeleteProjectModal() {
+  const { t } = useTranslation()
   const initialValues : CheckPasswordForm = {
     password: ''
   }
@@ -52,8 +54,8 @@ export default function DeleteProjectModal() {
       open={open}
       header={{
         icon: Delete,
-        title: 'Delete Project',
-        description: 'Add your password to delete project'
+        title: t('delete_project'),
+        description: t('delete_project_description')
       }}
       onClose={() => navigate(location.pathname, {replace: true}) }
     >
@@ -62,10 +64,10 @@ export default function DeleteProjectModal() {
         noValidate
       >
         <Input
-          placeholder="Password"
+          placeholder={t('password.label')}
           type="password"
           {...register("password", {
-            required: "Required",
+            required: t('field.required'),
           })}
         />
 
@@ -74,7 +76,7 @@ export default function DeleteProjectModal() {
         )}
 
         <Button
-          label="Delete"
+          label={t('delete')}
           variant="default"
           size="lg"
           onClick={(e) => {e.preventDefault(); handleSubmit(handleForm)()}}

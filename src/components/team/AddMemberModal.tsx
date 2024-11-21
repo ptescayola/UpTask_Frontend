@@ -2,9 +2,11 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import AddMemberForm from '@/components/team/AddMemeberForm'
 import { Dialog } from '@factorialco/factorial-one/dist/experimental'
 import { People } from '@factorialco/factorial-one/icons/app'
+import { useTranslation } from 'react-i18next'
 
 export default function AddMemberModal() {
 
+  const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -18,8 +20,8 @@ export default function AddMemberModal() {
         open={open}
         header={{
           icon: People,
-          title: 'Add new team member',
-          description: 'Fill out the form and add a team member'
+          title: t('add_member'),
+          description: t('add_member_description')
         }}
         onClose={() => navigate(location.pathname, {replace: true}) }
       >

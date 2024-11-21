@@ -9,8 +9,10 @@ import { createTask } from '@/api/TaskAPI'
 import { toast } from 'react-toastify'
 import { Button } from '@factorialco/factorial-one'
 import Notification from '@/components/shared/Notification'
+import { useTranslation } from 'react-i18next'
 
 export default function AddTaskModal() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
@@ -54,8 +56,8 @@ export default function AddTaskModal() {
         open={open}
         header={{
           icon: Pencil,
-          title: 'New Task',
-          description: 'Fill out the form and create a task'
+          title: t('new_task'),
+          description: t('new_task_description')
         }}
         onClose={() => navigate(location.pathname, {replace: true}) }
       >
@@ -70,7 +72,7 @@ export default function AddTaskModal() {
           />
 
           <Button
-            label="Create new task"
+            label={t('create_new_task')}
             variant="default"
             size="lg"
             onClick={(e) => {e.preventDefault(); handleSubmit(handleCreateTask)()}}

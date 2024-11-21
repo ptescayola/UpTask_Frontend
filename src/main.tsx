@@ -6,6 +6,7 @@ import { BreadcrumbProvider } from '@/contexts/BreadcrumbContext'
 import './index.css'
 import '@factorialco/factorial-one/dist/styles.css'
 import Router from './router'
+import './lib/i18n'
 
 const queryClient = new QueryClient()
 

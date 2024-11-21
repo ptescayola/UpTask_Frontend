@@ -9,6 +9,7 @@ import { updateTask } from '@/api/TaskAPI'
 import { toast } from 'react-toastify'
 import Notification from '@/components/shared/Notification'
 import { Button } from '@factorialco/factorial-one'
+import { useTranslation } from 'react-i18next'
 
 type EditTaskModalProps = {
   data: Task
@@ -16,6 +17,8 @@ type EditTaskModalProps = {
 }
 
 export default function EditTaskModal({data, taskId} : EditTaskModalProps) {
+
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const params = useParams()
@@ -52,8 +55,8 @@ export default function EditTaskModal({data, taskId} : EditTaskModalProps) {
       header={
         {
           icon: Pencil,
-          title: 'Edit Task',
-          description: 'Fill out the form and edit a task'
+          title: t('edit_task'),
+          description: t('edit_task_description')
         }
       }
       onClose={() => navigate(location.pathname, {replace: true}) }
@@ -68,7 +71,7 @@ export default function EditTaskModal({data, taskId} : EditTaskModalProps) {
         />
 
         <Button
-          label="Update"
+          label={t('update')}
           variant="default"
           size="lg"
           onClick={(e) => {e.preventDefault(); handleSubmit(handleEditTask)()}}

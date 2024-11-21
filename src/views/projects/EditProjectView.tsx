@@ -5,9 +5,11 @@ import { getProjectById } from '@/api/ProjectAPI'
 import EditProjectForm from '@/components/projects/EditProjectForm'
 import { useBreadcrumb } from '@/hooks/useBreadcrumb'
 import { Widget } from '@factorialco/factorial-one/dist/experimental'
+import { useTranslation } from 'react-i18next'
 
 export default function EditProjectView() {
 
+  const { t } = useTranslation()
   const { setBreadcrumbs } = useBreadcrumb()
 
   const params = useParams()
@@ -21,8 +23,8 @@ export default function EditProjectView() {
   useEffect(() => {
     if (data) {
       setBreadcrumbs([
-        { label: 'Projects', href: '/' },
-        { label: `Edit ${data.projectName}` }
+        { label: t('projects'), href: '/' },
+        { label: `${t('edit')} ${data.projectName}` }
       ])
     }
   }, [data, setBreadcrumbs])

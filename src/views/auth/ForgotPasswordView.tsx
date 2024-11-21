@@ -7,8 +7,11 @@ import { toast } from 'react-toastify'
 import Notification from '@/components/shared/Notification'
 import { Button, Link } from '@factorialco/factorial-one'
 import { Input } from '@factorialco/factorial-one/dist/experimental'
+import { useTranslation } from 'react-i18next'
 
 export default function ForgotPasswordView() {
+
+  const { t } = useTranslation()
   const initialValues: ForgotPasswordForm = {
     email: ''
   }
@@ -29,7 +32,7 @@ export default function ForgotPasswordView() {
 
   return (
     <>
-      <h1 className="text-2xl text-f1-background-bold">Reset password</h1>
+      <h1 className="text-2xl text-f1-background-bold">{t('reset_password')}</h1>
 
       <form
         className="space-y-2"
@@ -37,13 +40,13 @@ export default function ForgotPasswordView() {
       >
         <div className="space-y-2">
           <Input
-            placeholder="email"
+            placeholder={t('email.label')}
             type="email"
             {...register("email", {
-              required: "Required",
+              required: t('field.required'),
               pattern: {
                 value: /\S+@\S+\.\S+/,
-                message: "Email not valid"
+                message: t('email.invalid')
               }
             })}
           />
@@ -54,7 +57,7 @@ export default function ForgotPasswordView() {
 
         <div className='AuthButton'>
           <Button
-            label="Request new password"
+            label={t('request_password')}
             variant="default"
             size="lg"
             onClick={(e) => {e.preventDefault(); handleSubmit(handleForgotPassword)()}}
@@ -64,10 +67,10 @@ export default function ForgotPasswordView() {
 
       <nav className="space-y-2 text-center">
         <div>
-          Do you already have an account? <Link href={'/auth/login'}>Log in</Link>
+          {t('have_account')} <Link href={'/auth/login'}>{t('login')}</Link>
         </div>
         <div>
-          Forgot your password? <Link href='/auth/forgot-password'>Reset</Link>
+        {t('forgot_password')} <Link href='/auth/forgot-password'>{t('reset')}</Link>
         </div>
       </nav>
     </>

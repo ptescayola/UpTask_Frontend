@@ -7,12 +7,14 @@ import { toast } from 'react-toastify'
 import Notification from '@/components/shared/Notification'
 import { Button } from '@factorialco/factorial-one'
 import { Input } from '@factorialco/factorial-one/dist/experimental'
+import { useTranslation } from 'react-i18next'
 
 type ProfileFormProps = {
   data: User
 }
 
 export default function ProfileForm({ data }: ProfileFormProps) {
+  const { t } = useTranslation()
   const { register, handleSubmit, formState: { errors } } = useForm<UserProfileForm>({ defaultValues: data })
 
   const queryClient = useQueryClient()
@@ -30,7 +32,9 @@ export default function ProfileForm({ data }: ProfileFormProps) {
   return (
     <>
       <div className="space-y-2">
-        <h1 className="text-2xl text-f1-background-bold">Profile</h1>
+        <h1 className="text-2xl text-f1-background-bold">
+          {t('profile')}
+        </h1>
 
         <form
           className="space-y-2"
@@ -38,10 +42,10 @@ export default function ProfileForm({ data }: ProfileFormProps) {
         >
           <div className="space-y-2">
             <Input
-              placeholder="Name"
+              placeholder={t('name')}
               type="text"
               {...register("name", {
-                required: "Required"
+                required: t('field.required')
               })}
             />
             {errors.name && (
@@ -51,13 +55,26 @@ export default function ProfileForm({ data }: ProfileFormProps) {
 
           <div className="space-y-2">
             <Input
-              placeholder="Email"
+              placeholder={t('lastname')}
+              type="text"
+              {...register("lastname", {
+                required: t('field.required')
+              })}
+            />
+            {errors.lastname && (
+              <ErrorMessage>{errors.lastname.message}</ErrorMessage>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Input
+              placeholder={t('email.label')}
               type="email"
               {...register("email", {
-                required: "Required",
+                required: t('field.required'),
                 pattern: {
                   value: /\S+@\S+\.\S+/,
-                  message: "Email not valid"
+                  message: t('email.invalid')
                 }
               })}
             />
@@ -66,7 +83,7 @@ export default function ProfileForm({ data }: ProfileFormProps) {
             )}
           </div>
           <Button
-            label="Update"
+            label={t('update')}
             variant="default"
             size="lg"
             onClick={(e) => {e.preventDefault(); handleSubmit(handleEditProfile)()}}

@@ -9,22 +9,25 @@ import { ProjectFormData } from '@/types/index'
 import { createProject } from '@/api/ProjectAPI'
 import { useBreadcrumb } from '@/hooks/useBreadcrumb'
 import Notification from '@/components/shared/Notification'
+import { useTranslation } from 'react-i18next'
 
 export default function CreateProjectView() {
 
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { setBreadcrumbs } = useBreadcrumb()
 
   const initialValues : ProjectFormData = {
     projectName: '',
     clientName: '',
+    clientUrl: '',
     description: ''
   }
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: 'Projects', href: '/' },
-      { label: 'New Project' }
+      { label: t('projects'), href: '/' },
+      { label: t('new_project')}
     ])
   }, [setBreadcrumbs])
 
@@ -45,14 +48,14 @@ export default function CreateProjectView() {
 
   return (
     <div className="space-y-2">
-      <div className='flex flex-row-reverse justify-between'>
+      <div className='flex justify-between'>
         <div>
-          <h1 className="text-2xl text-f1-background-bold">Create project</h1>
-          <p className="text-lg text-f1-foreground-secondary">Please complete the form with all project details to proceed.</p>
+          <h1 className="text-2xl text-f1-background-bold">{t('create_new_project')}</h1>
+          <p className="text-lg text-f1-foreground-secondary">{t('create_new_project_description')}</p>
         </div>
         <nav>
         <Button
-          label="Cancel"
+          label={t('cancel')}
           onClick={() => navigate('/')}
           variant="neutral"
           size="lg"
@@ -70,7 +73,7 @@ export default function CreateProjectView() {
         />
 
         <Button
-          label="Create new project"
+          label={t('create')}
           variant="default"
           size="lg"
           onClick={(e) => {e.preventDefault(); handleSubmit(handleForm)()}}

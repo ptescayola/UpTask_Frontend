@@ -13,8 +13,11 @@ import { Widget } from '@factorialco/factorial-one/dist/experimental'
 import { isManager } from '@/utils/policies'
 import { useAuth } from '@/hooks/useAuth'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export default function ProjectDetailsView() {
+
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { setBreadcrumbs } = useBreadcrumb()
   const { data: user, isLoading: authLoading } = useAuth()
@@ -30,7 +33,7 @@ export default function ProjectDetailsView() {
   useEffect(() => {
     if (data) {
       setBreadcrumbs([
-        { label: 'Projects', href: '/' },
+        { label: t('projects'), href: '/' },
         { label: data.projectName, href: `/projects/${projectId}` }
       ])
     }
@@ -42,14 +45,14 @@ export default function ProjectDetailsView() {
   if (isError) return <Navigate to='/404' />
   if (data && user) return (
     <div className="space-y-2">
-      <div className='flex flex-row-reverse justify-between mb-8'>
-        <div>
-          <h1 className="text-2xl text-f1-background-bold">Tasks</h1>
-        </div>
+      <div className='flex justify-between mb-8'>
+        <h1 className="text-2xl text-f1-background-bold">
+          {t('tasks')}
+        </h1>
         <div className='flex gap-2'>
           <Button
             icon={Add}
-            label="Add new task"
+            label={t('add_task')}
             variant="default"
             size="lg"
             onClick={() => navigate(location.pathname + '?newTask=true')}
@@ -57,7 +60,7 @@ export default function ProjectDetailsView() {
           {isManager(data.manager, user._id) && (
             <Button
               icon={People}
-              label="Collaborators"
+              label={t('collaborators')}
               variant="neutral"
               size="lg"
               onClick={() => navigate('team')}

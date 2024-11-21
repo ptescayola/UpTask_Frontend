@@ -7,8 +7,11 @@ import { toast } from 'react-toastify'
 import Notification from '@/components/shared/Notification'
 import { Input } from '@factorialco/factorial-one/dist/experimental'
 import { Button, Link } from '@factorialco/factorial-one'
+import { useTranslation } from 'react-i18next'
 
 export default function RegisterView() {
+
+  const { t } = useTranslation()
   const initialValues: RequestConfirmationCodeForm = {
     email: ''
   }
@@ -29,7 +32,9 @@ export default function RegisterView() {
 
   return (
       <>
-        <h1 className="text-2xl text-f1-background-bold">Request new code confirmation</h1>
+        <h1 className="text-2xl text-f1-background-bold">
+          {t('request_new_code')}
+        </h1>
 
         <form
           className="space-y-2"
@@ -37,13 +42,13 @@ export default function RegisterView() {
         >
           <div className="space-y-2">
             <Input
-              placeholder="Email"
+              placeholder={t('email.label')}
               type="email"
               {...register("email", {
-                required: "Required",
+                required: t('field.required'),
                 pattern: {
                   value: /\S+@\S+\.\S+/,
-                  message: "Email not valid"
+                  message: t('email.invalid')
                 }
               })}
             />
@@ -54,7 +59,7 @@ export default function RegisterView() {
 
           <div className='AuthButton'>
             <Button
-              label="Send code"
+              label={t('send_code')}
               variant="default"
               size="lg"
               onClick={(e) => {e.preventDefault(); handleSubmit(handleRequestCode)()}}
@@ -64,10 +69,10 @@ export default function RegisterView() {
 
         <nav className="space-y-2 text-center">
           <div>
-            Do you already have an account? <Link href={'/auth/login'}>Log in</Link>
+            {t('have_account')} <Link href={'/auth/login'}>{t('login')}</Link>
           </div>
           <div>
-            Forgot your password? <Link href='/auth/forgot-password'>Reset</Link>
+            {t('forgot_password')} <Link href='/auth/forgot-password'>{t('reset')}</Link>
           </div>
         </nav>
       </>

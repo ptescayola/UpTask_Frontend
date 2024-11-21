@@ -7,8 +7,11 @@ import { Button } from '@factorialco/factorial-one'
 import { Input } from '@factorialco/factorial-one/dist/experimental'
 import { toast } from 'react-toastify'
 import Notification from '@/components/shared/Notification'
+import { useTranslation } from 'react-i18next'
 
 export default function ChangePasswordView() {
+
+  const { t } = useTranslation()
   const initialValues : UpdateCurrentUserPasswordForm = {
     current_password: '',
     password: '',
@@ -30,7 +33,9 @@ export default function ChangePasswordView() {
     <>
       <div className="space-y-2">
 
-        <h1 className="text-2xl text-f1-background-bold">Change Password</h1>
+        <h1 className="text-2xl text-f1-background-bold">
+          {t('change_password')}
+        </h1>
 
         <form
           className="space-y-2"
@@ -41,7 +46,7 @@ export default function ChangePasswordView() {
               placeholder="Current password"
               type="password"
               {...register("current_password", {
-                required: "Required"
+                required: t('field.required')
               })}
             />
             {errors.current_password && (
@@ -51,13 +56,13 @@ export default function ChangePasswordView() {
 
           <div className="space-y-2">
             <Input
-              placeholder="New password"
+              placeholder={t('new_password')}
               type="password"
               {...register("password", {
-                required: "Required",
+                required: t('field.required'),
                 minLength: {
                   value: 8,
-                  message: 'The password must be at least 8 characters long'
+                  message: t('password.too_short')
                 }
               })}
             />
@@ -67,11 +72,11 @@ export default function ChangePasswordView() {
           </div>
           <div className="space-y-2">
             <Input
-              placeholder="Repeat password"
+              placeholder={t('repeat_password')}
               type="password"
               {...register("password_confirmation", {
-                required: "Required",
-                validate: value => value === password || 'Passwords are not match'
+                required: t('field.required'),
+                validate: value => value === password || t('password.not_match')
               })}
             />
             {errors.password_confirmation && (
@@ -80,7 +85,7 @@ export default function ChangePasswordView() {
           </div>
 
           <Button
-            label="Update"
+            label={t('update')}
             variant="default"
             size="lg"
             onClick={(e) => {e.preventDefault(); handleSubmit(handleChangePassword)()}}

@@ -8,7 +8,7 @@ export async function createProject(formData: ProjectFormData) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error)
+      throw new Error(error.response.data.errors[0].msg)
     }
   }
 }
@@ -20,7 +20,7 @@ export async function getProjects() {
     return (response.success) ? response.data : []
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error)
+      throw new Error(error.response.data.errors[0].msg)
     }
   }
 }
@@ -34,7 +34,7 @@ export async function getProjectById(id: Project['_id']) {
     }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error)
+      throw new Error(error.response.data.errors[0].msg)
     }
   }
 }
@@ -48,7 +48,7 @@ export async function getFullProject(id: Project['_id']) {
     }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error)
+      throw new Error(error.response.data.errors[0].msg)
     }
   }
 }
@@ -64,7 +64,7 @@ export async function updateProject({formData, projectId} : ProjectAPIType ) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error)
+      throw new Error(error.response.data.errors[0].msg)
     }
   }
 }
@@ -76,7 +76,7 @@ export async function deleteProject(id: Project['_id']) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error)
+      throw new Error(error.response.data.errors[0].msg)
     }
   }
 }

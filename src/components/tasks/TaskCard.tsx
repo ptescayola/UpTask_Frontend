@@ -12,6 +12,7 @@ import { deleteTask } from '@/api/TaskAPI'
 import { formatDate } from '@/utils/index'
 import Card from '@/components/shared/Card'
 import Notification from '@/components/shared/Notification'
+import { useTranslation } from 'react-i18next'
 
 type TaskCardProps = {
   task: TaskProject
@@ -20,6 +21,7 @@ type TaskCardProps = {
 
 export default function TaskCard({ task, canEdit }: TaskCardProps) {
 
+  const { t } = useTranslation()
   const [isHovered, setIsHovered] = useState(false)
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -90,17 +92,17 @@ export default function TaskCard({ task, canEdit }: TaskCardProps) {
                         title: "Root",
                         items: [
                           {
-                            label: "View",
+                            label: t('view'),
                             icon: EyeVisible,
                             onClick: () => navigate(location.pathname + `?viewTask=${task._id}`)
                           },
                           canEdit && {
-                            label: "Edit",
+                            label: t('edit'),
                             icon: Pencil,
                             onClick: () => navigate(location.pathname + `?editTask=${task._id}`)
                           },
                           canEdit && {
-                            label: "Delete",
+                            label: t('delete'),
                             icon: Delete,
                             onClick: () => mutate({ projectId, taskId: task._id })
                           }

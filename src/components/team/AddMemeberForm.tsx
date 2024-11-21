@@ -7,8 +7,11 @@ import { findUserByEmail } from '@/api/TeamAPI'
 import SearchResult from '@/components/team/SearchResult'
 import { Input } from '@factorialco/factorial-one/dist/experimental'
 import { Button } from '@factorialco/factorial-one'
+import { useTranslation } from 'react-i18next'
 
 export default function AddMemberForm() {
+
+    const { t } = useTranslation()
     const initialValues: TeamMemberForm = {
       email: ''
     }
@@ -39,13 +42,13 @@ export default function AddMemberForm() {
         >
           <div className="space-y-2">
             <Input
-              placeholder="Email"
+              placeholder={t('email.label')}
               type="email"
               {...register("email", {
-                required: "Required",
+                required: t('field.required'),
                 pattern: {
                   value: /\S+@\S+\.\S+/,
-                  message: "Email not valid"
+                  message: t('email.invalid')
                 }
               })}
             />
@@ -55,7 +58,7 @@ export default function AddMemberForm() {
           </div>
 
           <Button
-            label="Find user"
+            label={t('find_user')}
             variant="default"
             size="lg"
             onClick={(e) => {e.preventDefault(); handleSubmit(handleSearchUser)()}}
