@@ -1,18 +1,13 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDraggable } from '@dnd-kit/core'
-import { Menu, MenuButton, MenuItems, Transition } from '@headlessui/react'
-import { Ellipsis, EyeVisible, Delete, Pencil } from '@factorialco/factorial-one/icons/app'
-import { Icon } from '@factorialco/factorial-one'
-import { RawTag, Menu as MenuOptions } from '@factorialco/factorial-one/dist/experimental'
 import { TaskProject, ExcludesNullish } from "@/types/index"
 import { deleteTask } from '@/api/TaskAPI'
 import { formatDate } from '@/utils/index'
-import Card from '@/components/shared/Card'
-import Notification from '@/components/shared/Notification'
-import { useTranslation } from 'react-i18next'
+import { Notification, Card, Badge, ButtonGroup } from '@/components/shared'
+import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 type TaskCardProps = {
   task: TaskProject
@@ -21,12 +16,12 @@ type TaskCardProps = {
 
 export default function TaskCard({ task, canEdit }: TaskCardProps) {
 
-  const { t } = useTranslation()
+  const [isActionsHovered, setIsActionsHovered] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task._id,
-    disabled: isHovered
+    disabled: isActionsHovered
   })
 
   const navigate = useNavigate()
@@ -37,7 +32,7 @@ export default function TaskCard({ task, canEdit }: TaskCardProps) {
   const { mutate } = useMutation({
     mutationFn: deleteTask,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {
       toast(<Notification variant="positive" title={data} />)
@@ -57,63 +52,41 @@ export default function TaskCard({ task, canEdit }: TaskCardProps) {
         {...listeners}
         {...attributes}
         style={style}
+        onMouseEnter={() => setIsHovered(true)} 
+        onMouseLeave={() => setIsHovered(false)}
       >
         <Card
           title={task.name}
           content={
             <>
-              <p>{task.description}</p>
-              <RawTag text={formatDate(task.createdAt)} />
+              <Badge text={formatDate(task.createdAt)} />
+              <p className='mt-2'>{task.description}</p>
             </>
           }
           actions={
-            <Menu
-              as="div"
-              className="relative"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              <MenuButton>
-                <Icon icon={Ellipsis} size="md" />
-              </MenuButton>
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <MenuItems className="absolute right-0 z-10 rounded-md px-3 pt-3 shadow-lg bg-f1-background">
-                  <MenuOptions
-                    tree={[
-                      {
-                        title: "Root",
-                        items: [
-                          {
-                            label: t('view'),
-                            icon: EyeVisible,
-                            onClick: () => navigate(location.pathname + `?viewTask=${task._id}`)
-                          },
-                          canEdit && {
-                            label: t('edit'),
-                            icon: Pencil,
-                            onClick: () => navigate(location.pathname + `?editTask=${task._id}`)
-                          },
-                          canEdit && {
-                            label: t('delete'),
-                            icon: Delete,
-                            onClick: () => mutate({ projectId, taskId: task._id })
-                          }
-                        ].filter(Boolean as unknown as ExcludesNullish),
-                        isRoot: true
-                      }
-                    ]}
-                  />
-                </MenuItems>
-              </Transition>
-            </Menu>
+            isHovered && (
+              <div className='absolute top-[10px] right-[10px]'>
+                <ButtonGroup
+                  onMouseEnter={() => setIsActionsHovered(true)}
+                  onMouseLeave={() => setIsActionsHovered(false)}
+                  size="sm"
+                  items={[
+                    {
+                      Icon: EyeIcon,
+                      onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(location.pathname + `?viewTask=${task._id}`)}
+                    },
+                    canEdit && {
+                      Icon: PencilIcon,
+                      onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(location.pathname + `?editTask=${task._id}`)}
+                    },
+                    canEdit && {
+                      Icon: TrashIcon,
+                      onClick: (e: React.MouseEvent) => {e.stopPropagation(); mutate({ projectId, taskId: task._id })}
+                    }
+                  ].filter(Boolean as unknown as ExcludesNullish)}
+                />
+              </div>
+            )
           }
         />
       </div>

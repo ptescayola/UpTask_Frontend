@@ -1,12 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import ErrorMessage from '@/components/ErrorMessage'
 import { TeamMemberForm } from '@/types/index'
 import { findUserByEmail } from '@/api/TeamAPI'
 import SearchResult from '@/components/team/SearchResult'
-import { Input } from '@factorialco/factorial-one/dist/experimental'
-import { Button } from '@factorialco/factorial-one'
+import { Input, Button } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
 
 export default function AddMemberForm() {
@@ -37,7 +35,7 @@ export default function AddMemberForm() {
     return (
       <>
         <form
-          className="space-y-2"
+          className="space-y-8"
           noValidate
         >
           <div className="space-y-2">
@@ -51,22 +49,18 @@ export default function AddMemberForm() {
                   message: t('email.invalid')
                 }
               })}
+              errors={errors.email}
             />
-            {errors.email && (
-              <ErrorMessage>{errors.email.message}</ErrorMessage>
-            )}
           </div>
 
           <Button
             label={t('find_user')}
-            variant="default"
-            size="lg"
             onClick={(e) => {e.preventDefault(); handleSubmit(handleSearchUser)()}}
           />
         </form>
 
         <div className="mt-10">
-          {mutation.isPending && <p className="text-center">Loading...</p>}
+          {mutation.isPending && <p className="text-center">'Loading...'</p>}
           {mutation.error && <p className="text-center">{mutation.error.message}</p>}
           {mutation.data && <SearchResult user={mutation.data} reset={resetData} />}
         </div>

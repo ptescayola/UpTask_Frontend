@@ -3,8 +3,8 @@ import { TeamMember } from '@/types/index'
 import { addUserToProject } from '@/api/TeamAPI'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import Notification from '@/components/shared/Notification'
-import { Button } from '@factorialco/factorial-one'
+import { Notification } from '@/components/shared'
+import { Button } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
 
 type SearchResultProps = {
@@ -23,7 +23,7 @@ export default function SearchResult({ user, reset }: SearchResultProps) {
   const { mutate } = useMutation({
     mutationFn: addUserToProject,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {
       toast(<Notification variant="positive" title={data} />)
@@ -48,8 +48,6 @@ export default function SearchResult({ user, reset }: SearchResultProps) {
         <p>{user.name}</p>
         <Button
           label={t('add_to_project')}
-          variant="default"
-          size="lg"
           onClick={handleAddUserToProject}
         />
       </div>

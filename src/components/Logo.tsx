@@ -1,5 +1,5 @@
 export default function Logo() {
   return (
-    <img src="/favicon.svg" alt="UpTask" width='40px'/>
+    <img src="/logo.svg" alt="UpTask" width='40px'/>
   )
 }

@@ -1,13 +1,11 @@
 import { useForm } from 'react-hook-form'
-import ErrorMessage from '@/components/ErrorMessage'
 import { UpdateCurrentUserPasswordForm } from '@/types/index'
 import { useMutation } from '@tanstack/react-query'
 import { changePassword } from '@/api/ProfileAPI'
-import { Button } from '@factorialco/factorial-one'
-import { Input } from '@factorialco/factorial-one/dist/experimental'
 import { toast } from 'react-toastify'
-import Notification from '@/components/shared/Notification'
+import { Notification } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
+import { Input, Button } from '@/components/shared'
 
 export default function ChangePasswordView() {
 
@@ -22,7 +20,7 @@ export default function ChangePasswordView() {
 
   const { mutate } = useMutation({
       mutationFn: changePassword,
-      onError: (error) => toast(<Notification variant="destructive" title={error.message} />),
+      onError: (error) => toast(<Notification variant="danger" title={error.message} />),
       onSuccess: (data)  => toast(<Notification variant="positive" title={data} />)
   })
 
@@ -33,7 +31,7 @@ export default function ChangePasswordView() {
     <>
       <div className="space-y-2">
 
-        <h1 className="text-2xl text-f1-background-bold">
+        <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
           {t('change_password')}
         </h1>
 
@@ -48,10 +46,8 @@ export default function ChangePasswordView() {
               {...register("current_password", {
                 required: t('field.required')
               })}
+              errors={errors.current_password}
             />
-            {errors.current_password && (
-              <ErrorMessage>{errors.current_password.message}</ErrorMessage>
-            )}
           </div>
 
           <div className="space-y-2">
@@ -65,10 +61,8 @@ export default function ChangePasswordView() {
                   message: t('password.too_short')
                 }
               })}
+              errors={errors.password}
             />
-            {errors.password && (
-              <ErrorMessage>{errors.password.message}</ErrorMessage>
-            )}
           </div>
           <div className="space-y-2">
             <Input
@@ -78,16 +72,12 @@ export default function ChangePasswordView() {
                 required: t('field.required'),
                 validate: value => value === password || t('password.not_match')
               })}
+              errors={errors.password_confirmation}
             />
-            {errors.password_confirmation && (
-              <ErrorMessage>{errors.password_confirmation.message}</ErrorMessage>
-            )}
           </div>
 
           <Button
             label={t('update')}
-            variant="default"
-            size="lg"
             onClick={(e) => {e.preventDefault(); handleSubmit(handleChangePassword)()}}
           />
         </form>

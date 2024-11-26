@@ -1,17 +1,22 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { UserRegistrationForm } from '@/types/index'
-import ErrorMessage from '@/components/ErrorMessage'
 import { createAccount } from '@/api/AuthAPI'
 import { toast } from 'react-toastify'
-import { Input } from '@factorialco/factorial-one/dist/experimental'
-import { Button, Link } from '@factorialco/factorial-one'
-import Notification from '@/components/shared/Notification'
 import { useTranslation } from 'react-i18next'
+import { Notification, Input, Button, EvaluatePassword } from '@/components/shared'
+import { EyeIcon, EyeSlashIcon, RocketLaunchIcon } from '@heroicons/react/24/outline'
+import AuthHeader from '@/components/auth/AuthHeader'
+import AuthFooter from '@/components/auth/AuthFooter'
+import { useNavigate } from 'react-router-dom'
+import { RoutesEnum } from '@/constants/routes'
 
 export default function RegisterView() {
   
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
   const initialValues: UserRegistrationForm = {
     name: '',
     lastname: '',
@@ -20,127 +25,147 @@ export default function RegisterView() {
     password_confirmation: ''
   }
 
-  const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<UserRegistrationForm>({ defaultValues: initialValues });
+  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<UserRegistrationForm>({ defaultValues: initialValues })
+
+  const password = watch('password')
+  const [showPassword, setShowPassword] = useState<{ password: boolean; password_confirmation: boolean }>({
+    password: false,
+    password_confirmation: false,
+  })
+  const togglePasswordVisibility = (elem: 'password' | 'password_confirmation') => {
+    setShowPassword((prev) => ({...prev, [elem]: !prev[elem]}))
+  }
 
   const { mutate } = useMutation({
     mutationFn: createAccount,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
-    onSuccess: (data) => {
-      toast(<Notification variant="positive" title={data} />)
+    onSuccess: () => {
+      navigate(RoutesEnum.CONFIRM_EMAIL)
       reset()
     }
   })
-
-  const password = watch('password')
 
   const handleRegister = (formData: UserRegistrationForm) => mutate(formData)
 
   return (
     <>
-      <h1 className="text-2xl text-f1-background-bold">
-        {t('create_account')}
-      </h1>
+      <div className='max-w-xl lg:max-w-3xl'>
 
-      <form
-        className="space-y-2"
-        noValidate
-      >
-        <div className="space-y-2">
-          <Input
-            placeholder={t('email.label')}
-            type="email"
-            {...register("email", {
-              required: t('field.required'),
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: t('email.invalid'),
-              }
-            })}
-          />
-          {errors.email && (
-            <ErrorMessage>{errors.email.message}</ErrorMessage>
-          )}
-        </div>
+        <AuthHeader
+          Icon={RocketLaunchIcon}
+          title="Welcome to Up Task"
+          subtitle={t('create_account')}
+        />
 
-        <div className="space-y-2">
-          <Input
-            placeholder={t('name')}
-            type="text"
-            {...register("name", {
-              required: t('field.required')
-            })}
-          />
-          {errors.name && (
-            <ErrorMessage>{errors.name.message}</ErrorMessage>
-          )}
-        </div>
+        <form className="mt-8 grid grid-cols-6 gap-6">
+          <div className="col-span-6 sm:col-span-3">
+            <Input
+              type="text"
+              label={t('firstname')}
+              {...register("name", {
+                required: t('field.required')
+              })}
+              errors={errors.name}
+            />
+          </div>
 
-        <div className="space-y-2">
-          <Input
-            placeholder={t('lastname')}
-            type="text"
-            {...register("lastname", {
-              required: t('field.required')
-            })}
-          />
-          {errors.name && (
-            <ErrorMessage>{errors.name.message}</ErrorMessage>
-          )}
-        </div>
+          <div className="col-span-6 sm:col-span-3">
+            <Input
+              type="text"
+              label={t('lastname')}
+              {...register("lastname", {
+                required: t('field.required')
+              })}
+              errors={errors.lastname}
+            />
+          </div>
 
-        <div className="space-y-2">
-          <Input
-            placeholder={t('password.label')}
-            type="password"
-            {...register("password", {
-              required: t('field.required'),
-              minLength: {
-                value: 8,
-                message: t('password.too_short')
-              }
-            })}
-          />
+          <div className="col-span-6">
+            <Input
+              type="email"
+              label={t('email.label')}
+              {...register("email", {
+                required: t('field.required'),
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: t('email.invalid')
+                }
+              })}
+              errors={errors.email}
+            />
+          </div>
+          
+          <div className="col-span-6 sm:col-span-3">
+            <Input
+              type={showPassword.password ? "text" : "password"}
+              label="Password"
+              RightIcon={!showPassword.password  ? EyeIcon : EyeSlashIcon}
+              onRightIconClick={() => togglePasswordVisibility('password')}
+              {...register("password", {
+                required: t('field.required'),
+                minLength: {
+                  value: 8,
+                  message: t('password.too_short')
+                }
+              })}
+              errors={errors.password}
+            />
 
-          {errors.password && (
-            <ErrorMessage>{errors.password.message}</ErrorMessage>
-          )}
-        </div>
+            <EvaluatePassword password={password} />
+          </div>
 
-        <div className="space-y-2">
-          <Input
-            placeholder={t('repeat_password')}
-            type="password"
-            {...register("password_confirmation", {
-              required: t('field.required'),
-              validate: value => value === password || t('password.not_match')
-            })}
-          />
+          <div className="col-span-6 sm:col-span-3">
+            <Input
+              type={showPassword.password_confirmation ? "text" : "password"}
+              RightIcon={!showPassword.password_confirmation  ? EyeIcon : EyeSlashIcon}
+              onRightIconClick={() => togglePasswordVisibility('password_confirmation')}
+              label="Password Confirmation"
+              {...register("password_confirmation", {
+                required: t('field.required'),
+                validate: value => value === password || t('password.not_match')
+              })}
+              errors={errors.password_confirmation}
+            />
+          </div>
 
-          {errors.password_confirmation && (
-            <ErrorMessage>{errors.password_confirmation.message}</ErrorMessage>
-          )}
-        </div>
+          <div className="col-span-6">
+            <label htmlFor="MarketingAccept" className="flex gap-4">
+              <input
+                type="checkbox"
+                id="MarketingAccept"
+                name="marketing_accept"
+                className="size-5 rounded-md border-gray-200 bg-white shadow-sm"
+              />
 
-        <div className='AuthButton'>
-          <Button
-            label={t('register')}
-            variant="default"
-            size="lg"
-            onClick={(e) => {e.preventDefault(); handleSubmit(handleRegister)()}}
-          />
-        </div>
-      </form>
+              <span className="text-sm text-gray-700">
+                I want to receive emails about events, product updates and company announcements.
+              </span>
+            </label>
+          </div>
 
-      <nav className="space-y-2 text-center">
-        <div>
-          {t('have_account')} <Link href={'/auth/login'}>{t('login')}</Link>
-        </div>
-        <div>
-          {t('forgot_password')} <Link href='/auth/forgot-password'>{t('reset')}</Link>
-        </div>
-      </nav>
+          <div className="col-span-6">
+            <p className="text-sm text-gray-500">
+              By creating an account, you agree to our {' '}
+              <a href="#" className="text-gray-700 underline">terms and conditions</a>
+              {' '} and  {' '}
+              <a href="#" className="text-gray-700 underline">privacy policy</a>.
+            </p>
+          </div>
+
+          <div className="col-span-6">
+            <Button
+              label='Create an account'
+              onClick={handleSubmit(handleRegister)}
+              className="w-full"
+            />
+          </div>
+        </form>
+
+        <AuthFooter />
+
+      </div>
     </>
   )
 }

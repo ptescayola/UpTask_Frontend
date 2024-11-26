@@ -9,7 +9,7 @@ export async function findUserByEmail({projectId, formData}: {projectId: Project
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -21,7 +21,7 @@ export async function addUserToProject({projectId, id}: {projectId: Project['_id
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-        throw new Error(error.response.data.errors[0].msg)
+        throw new Error(error.response.data.error)
     }
   }
 }
@@ -33,7 +33,7 @@ export async function removeUserFromProject({projectId, userId}: {projectId: Pro
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -48,7 +48,7 @@ export async function getProjectTeam(projectId: Project['_id']) {
     }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }

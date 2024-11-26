@@ -3,12 +3,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import AddMemberModal from '@/components/team/AddMemberModal'
 import { getProjectTeam, removeUserFromProject } from '@/api/TeamAPI'
 import { toast } from 'react-toastify'
-import Notification from '@/components/shared/Notification'
-import { Widget } from '@factorialco/factorial-one/dist/experimental'
-import { Button } from '@factorialco/factorial-one'
 import type { TeamMember } from '@/types/index'
-import { Delete } from '@factorialco/factorial-one/icons/app'
-import Card from '@/components/shared/Card'
+import { TrashIcon } from '@heroicons/react/24/outline'
+import { Notification, Card, Button } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
 
 export default function ProjectTeamView() {
@@ -28,7 +25,7 @@ export default function ProjectTeamView() {
   const { mutate } = useMutation({
     mutationFn: removeUserFromProject,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {
       toast(<Notification variant="positive" title={data} />)
@@ -36,26 +33,27 @@ export default function ProjectTeamView() {
     }
   })
 
-  if (isLoading) return <Widget.Skeleton />
+  if (isLoading) return (<p>Loading...</p>)
   if (isError) return <Navigate to={'/404'} />
   if (data) return (
     <>
-      <div className='flex justify-between'>
-        <h1 className="text-2xl text-f1-background-bold">{t('team_manager')}</h1>
-
-        <div className='flex gap-2'>
+      <div className='flex justify-between mb-6'>
+        <div>
+          <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+            {t('team_manager')}
+          </h1>
+        </div>
+        <nav className='flex gap-2'>
           <Button
             label={t('add_collaborator')}
             onClick={() => navigate(location.pathname + '?addMember=true')}
-            size="lg"
           />
           <Button
             label={t('cancel')}
             onClick={() => navigate(`/projects/${projectId}`)}
             variant="neutral"
-            size="lg"
           />
-        </div>
+        </nav>
       </div>
 
       {data.length ? (
@@ -69,7 +67,7 @@ export default function ProjectTeamView() {
             actions={
               <Button
                 label=""
-                icon={Delete}
+                Icon={TrashIcon}
                 variant="neutral"
                 onClick={() => mutate({projectId, userId: member._id})}
               />
@@ -77,7 +75,7 @@ export default function ProjectTeamView() {
           />
         ))
       ) : (
-        <p className='text-center py-20'>{t('no_members_team')}</p>
+        <p className='text-center py-20 text-lg text-gray-400'>{t('no_members_team')}</p>
       )}
 
       <AddMemberModal />

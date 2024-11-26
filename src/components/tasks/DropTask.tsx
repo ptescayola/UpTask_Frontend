@@ -22,7 +22,7 @@ export default function DropTask({status} : DropTaskProps) {
       ref={setNodeRef}
       className="flex place-content-center items-center justify-center rounded-md border-2 border-dashed border-f1-border bg-f1-background p-6"
     >
-      <div className='text-lg text-f1-foreground-secondary'>
+      <div className='mt-4 max-w-md text-gray-500'>
         {t('drop_here')}
       </div>
     </div>

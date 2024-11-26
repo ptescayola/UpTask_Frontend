@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { ForgotPasswordForm } from '@/types/index'
-import ErrorMessage from '@/components/ErrorMessage'
 import { forgotPassword } from '@/api/AuthAPI'
 import { toast } from 'react-toastify'
-import Notification from '@/components/shared/Notification'
-import { Button, Link } from '@factorialco/factorial-one'
-import { Input } from '@factorialco/factorial-one/dist/experimental'
 import { useTranslation } from 'react-i18next'
+import { Notification, Input, Button } from '@/components/shared'
+import { LockClosedIcon } from '@heroicons/react/24/outline'
+import AuthHeader from '@/components/auth/AuthHeader'
+import AuthFooter from '@/components/auth/AuthFooter'
 
 export default function ForgotPasswordView() {
 
@@ -20,7 +20,7 @@ export default function ForgotPasswordView() {
   const { mutate } = useMutation({
     mutationFn: forgotPassword,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {
       toast(<Notification variant="positive" title={data} />)
@@ -32,47 +32,42 @@ export default function ForgotPasswordView() {
 
   return (
     <>
-      <h1 className="text-2xl text-f1-background-bold">{t('reset_password')}</h1>
+      <div className="w-full max-w-[320px]">
 
-      <form
-        className="space-y-2"
-        noValidate
-      >
-        <div className="space-y-2">
+        <AuthHeader
+          Icon={LockClosedIcon}
+          title="Forgot password?"
+          subtitle="No worries, we'll send you reset instructions."
+        />
+
+        <form
+          className="mx-auto mb-0 mt-8"
+          noValidate
+        >
           <Input
-            placeholder={t('email.label')}
             type="email"
+            label={t('email.label')}
             {...register("email", {
               required: t('field.required'),
               pattern: {
                 value: /\S+@\S+\.\S+/,
-                message: t('email.invalid')
+                message: t('email.invalid'),
               }
             })}
+            errors={errors.email}
           />
-          {errors.email && (
-            <ErrorMessage>{errors.email.message}</ErrorMessage>
-          )}
-        </div>
 
-        <div className='AuthButton'>
+          <br/>
+
           <Button
-            label={t('request_password')}
-            variant="default"
-            size="lg"
-            onClick={(e) => {e.preventDefault(); handleSubmit(handleForgotPassword)()}}
+            label="Reset password"
+            className="w-full"
+            onClick={handleSubmit(handleForgotPassword)}
           />
-        </div>
-      </form>
+        </form>
 
-      <nav className="space-y-2 text-center">
-        <div>
-          {t('have_account')} <Link href={'/auth/login'}>{t('login')}</Link>
-        </div>
-        <div>
-        {t('forgot_password')} <Link href='/auth/forgot-password'>{t('reset')}</Link>
-        </div>
-      </nav>
+        <AuthFooter />
+      </div>
     </>
   )
 }

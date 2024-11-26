@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '@factorialco/factorial-one'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
@@ -8,8 +7,9 @@ import ProjectForm from '@/components/projects/ProjectForm'
 import { ProjectFormData } from '@/types/index'
 import { createProject } from '@/api/ProjectAPI'
 import { useBreadcrumb } from '@/hooks/useBreadcrumb'
-import Notification from '@/components/shared/Notification'
+import { Notification } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
+import { Button } from '@/components/shared'
 
 export default function CreateProjectView() {
 
@@ -26,7 +26,7 @@ export default function CreateProjectView() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: t('projects'), href: '/' },
+      { label: t('projects'), onClick: () => navigate('/')},
       { label: t('new_project')}
     ])
   }, [setBreadcrumbs])
@@ -36,7 +36,7 @@ export default function CreateProjectView() {
   const { mutate } = useMutation({
     mutationFn: createProject,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {
       toast(<Notification variant="positive" title={data} />)
@@ -47,38 +47,39 @@ export default function CreateProjectView() {
   const handleForm = (formData : ProjectFormData) => mutate(formData)
 
   return (
-    <div className="space-y-2">
-      <div className='flex justify-between'>
+    <>
+      <div className='flex justify-between mb-6'>
         <div>
-          <h1 className="text-2xl text-f1-background-bold">{t('create_new_project')}</h1>
-          <p className="text-lg text-f1-foreground-secondary">{t('create_new_project_description')}</p>
+          <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+            {t('create_new_project')}
+          </h1>
+          <p className="mt-1 text-gray-500">
+            {t('create_new_project_description')}
+          </p>
         </div>
         <nav>
-        <Button
-          label={t('cancel')}
-          onClick={() => navigate('/')}
-          variant="neutral"
-          size="lg"
-        />
+          <Button
+            label={t('cancel')}
+            variant='neutral'
+            onClick={() => navigate('/')}
+          />
         </nav>
       </div>
 
       <form
-        className="space-y-2"
+        className="space-y-8"
         noValidate
       >
         <ProjectForm 
-            register={register}
-            errors={errors}
+          register={register}
+          errors={errors}
         />
 
         <Button
           label={t('create')}
-          variant="default"
-          size="lg"
           onClick={(e) => {e.preventDefault(); handleSubmit(handleForm)()}}
         />
       </form>
-    </div>
+    </>
   )
 }

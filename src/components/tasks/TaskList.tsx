@@ -6,9 +6,8 @@ import DropTask from '@/components/tasks/DropTask'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateStatus } from '@/api/TaskAPI'
 import { toast } from 'react-toastify'
-import Notification from '@/components/shared/Notification'
+import { Notification, Badge } from '@/components/shared'
 import { useParams } from 'react-router-dom'
-import { RawTag } from '@factorialco/factorial-one/dist/experimental'
 
 type TaskListProps = {
   tasks: TaskProject[]
@@ -43,7 +42,7 @@ export default function TaskList({ tasks, canEdit }: TaskListProps) {
   const { mutate } = useMutation({
     mutationFn: updateStatus,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['project', projectId] })
@@ -92,7 +91,7 @@ export default function TaskList({ tasks, canEdit }: TaskListProps) {
               <div className="flex items-center space-x-2">
                 <div className={`w-2 h-2 bg-${statusStyles[status]} rounded-full`}></div>
                 <h1 className="text-lg font-bold">{statusTranslations[status]}</h1>
-                <RawTag text={tasks.length.toString()} />
+                <Badge text={tasks.length.toString()} />
               </div>
               {tasks.map(task => <TaskCard key={task._id} task={task} canEdit={canEdit}/>)}
               <DropTask status={status} />

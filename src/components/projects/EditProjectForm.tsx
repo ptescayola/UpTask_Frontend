@@ -5,8 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateProject } from '@/api/ProjectAPI'
 import { toast } from 'react-toastify'
-import { Button } from '@factorialco/factorial-one'
-import Notification from '@/components/shared/Notification'
+import { Notification, Button } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
 
 type EditProjectFormProps = {
@@ -18,7 +17,7 @@ export default function EditProjectForm({data, projectId} : EditProjectFormProps
 
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const {register, handleSubmit, formState: {errors}} = useForm({defaultValues: {
+  const {register, handleSubmit, formState: {errors}} = useForm<ProjectFormData>({defaultValues: {
     projectName: data.projectName,
     clientName: data.clientName,
     clientUrl: data.clientUrl,
@@ -29,7 +28,7 @@ export default function EditProjectForm({data, projectId} : EditProjectFormProps
   const { mutate } = useMutation({
     mutationFn: updateProject,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({queryKey: ['projects']})
@@ -48,24 +47,27 @@ export default function EditProjectForm({data, projectId} : EditProjectFormProps
   }
 
   return (
-    <div className="space-y-2">
-      <div className='flex justify-between'>
+    <>
+      <div className="flex justify-between mb-6">
         <div>
-          <h1 className="text-2xl text-f1-background-bold">{t('edit_project')}</h1>
-          <p className="text-lg text-f1-foreground-secondary">{t('edit_project_description')}</p>
+          <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+            {t('edit_project')}
+            </h1>
+          <p className="mt-1 text-gray-500">
+            {t('edit_project_description')}
+          </p>
         </div>
         <nav>
           <Button
             label={t('cancel')}
-            onClick={() => navigate('/')}
             variant="neutral"
-            size="lg"
+            onClick={() => navigate('/')}
           />
         </nav>
       </div>
 
       <form
-        className="space-y-2"
+        className="space-y-8"
         noValidate
       >
         <ProjectForm 
@@ -75,11 +77,9 @@ export default function EditProjectForm({data, projectId} : EditProjectFormProps
 
         <Button
           label={t('update')}
-          variant="default"
-          size="lg"
           onClick={(e) => {e.preventDefault(); handleSubmit(handleForm)()}}
         />
       </form>
-    </div>
+    </>
   )
 }

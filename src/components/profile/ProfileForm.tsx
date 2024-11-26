@@ -1,12 +1,10 @@
 import { useForm } from 'react-hook-form'
-import ErrorMessage from '@/components/ErrorMessage'
 import { User, UserProfileForm } from '@/types/index'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateProfile } from '@/api/ProfileAPI'
 import { toast } from 'react-toastify'
-import Notification from '@/components/shared/Notification'
-import { Button } from '@factorialco/factorial-one'
-import { Input } from '@factorialco/factorial-one/dist/experimental'
+import { Notification } from '@/components/shared'
+import { Input, Button } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
 
 type ProfileFormProps = {
@@ -20,7 +18,7 @@ export default function ProfileForm({ data }: ProfileFormProps) {
   const queryClient = useQueryClient()
   const { mutate } = useMutation({
     mutationFn: updateProfile,
-    onError: (error) => toast(<Notification variant="destructive" title={error.message} />),
+    onError: (error) => toast(<Notification variant="danger" title={error.message} />),
     onSuccess: (data) => {
       toast(<Notification variant="positive" title={data} />)
       queryClient.invalidateQueries({queryKey: ['user']})
@@ -32,60 +30,55 @@ export default function ProfileForm({ data }: ProfileFormProps) {
   return (
     <>
       <div className="space-y-2">
-        <h1 className="text-2xl text-f1-background-bold">
+        <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
           {t('profile')}
         </h1>
 
         <form
-          className="space-y-2"
           noValidate
         >
-          <div className="space-y-2">
-            <Input
-              placeholder={t('name')}
-              type="text"
-              {...register("name", {
-                required: t('field.required')
-              })}
-            />
-            {errors.name && (
-              <ErrorMessage>{errors.name.message}</ErrorMessage>
-            )}
-          </div>
+          <Input
+            label={t('name')}
+            placeholder={t('name')}
+            type="text"
+            {...register("name", {
+              required: t('field.required')
+            })}
+            errors={errors.name}
+          />
 
-          <div className="space-y-2">
-            <Input
-              placeholder={t('lastname')}
-              type="text"
-              {...register("lastname", {
-                required: t('field.required')
-              })}
-            />
-            {errors.lastname && (
-              <ErrorMessage>{errors.lastname.message}</ErrorMessage>
-            )}
-          </div>
+          <br/>
 
-          <div className="space-y-2">
-            <Input
-              placeholder={t('email.label')}
-              type="email"
-              {...register("email", {
-                required: t('field.required'),
-                pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: t('email.invalid')
-                }
-              })}
-            />
-            {errors.email && (
-              <ErrorMessage>{errors.email.message}</ErrorMessage>
-            )}
-          </div>
+          <Input
+            label={t('lastname')}
+            placeholder={t('lastname')}
+            type="text"
+            {...register("lastname", {
+              required: t('field.required')
+            })}
+            errors={errors.lastname}
+          />
+
+          <br/>
+
+          <Input
+            label={t('email.label')}
+            placeholder={t('email.label')}
+            type="email"
+            {...register("email", {
+              required: t('field.required'),
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: t('email.invalid')
+              }
+            })}
+            errors={errors.email}
+          />
+
+          <br/>
+
           <Button
             label={t('update')}
-            variant="default"
-            size="lg"
             onClick={(e) => {e.preventDefault(); handleSubmit(handleEditProfile)()}}
           />
         </form>

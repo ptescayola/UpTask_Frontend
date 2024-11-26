@@ -30,7 +30,7 @@ export async function confirmAccount(formData: ConfirmToken) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -42,7 +42,7 @@ export async function requestConfirmationCode(formData: RequestConfirmationCodeF
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -55,7 +55,7 @@ export async function authenticateUser(formData: UserLoginForm) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -68,7 +68,7 @@ export async function forgotPassword(formData: ForgotPasswordForm) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -80,7 +80,7 @@ export async function validateToken(formData: ConfirmToken) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -92,7 +92,7 @@ export async function updatePasswordWithToken({formData, token}: {formData: NewP
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -106,7 +106,7 @@ export async function getUser() {
     }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -118,7 +118,7 @@ export async function checkPassword(formData: CheckPasswordForm) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }

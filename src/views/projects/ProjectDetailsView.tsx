@@ -2,18 +2,17 @@ import { useEffect } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getFullProject } from '@/api/ProjectAPI'
-import { Button } from '@factorialco/factorial-one'
 import AddTaskModal from '@/components/tasks/AddTaskModal'
 import TasksList from '@/components/tasks/TaskList'
 import EditTaskData from '@/components/tasks/EditTaskData'
 import TaskModalDetails from '@/components/tasks/TaskModalDetails'
 import { useBreadcrumb } from '@/hooks/useBreadcrumb'
-import { Add, People } from '@factorialco/factorial-one/icons/app'
-import { Widget } from '@factorialco/factorial-one/dist/experimental'
 import { isManager } from '@/utils/policies'
 import { useAuth } from '@/hooks/useAuth'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Button } from '@/components/shared'
+import { PlusIcon, UsersIcon } from '@heroicons/react/24/outline'
 
 export default function ProjectDetailsView() {
 
@@ -33,40 +32,37 @@ export default function ProjectDetailsView() {
   useEffect(() => {
     if (data) {
       setBreadcrumbs([
-        { label: t('projects'), href: '/' },
-        { label: data.projectName, href: `/projects/${projectId}` }
+        { label: t('projects'), onClick: () => navigate('/') },
+        { label: data.projectName, onClick: () => navigate(`/projects/${projectId}`)}
       ])
     }
   }, [data, setBreadcrumbs])
 
   const canEdit = useMemo(() => data?.manager === user?._id , [data, user])
 
-  if (isLoading && authLoading) return <Widget.Skeleton />
+  if (isLoading && authLoading) return (<p>Loading...</p>)
   if (isError) return <Navigate to='/404' />
   if (data && user) return (
-    <div className="space-y-2">
-      <div className='flex justify-between mb-8'>
-        <h1 className="text-2xl text-f1-background-bold">
+    <>
+      <div className='flex justify-between mb-6'>
+        <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
           {t('tasks')}
         </h1>
-        <div className='flex gap-2'>
+        <nav className='flex gap-2'>
           <Button
-            icon={Add}
+            Icon={PlusIcon}
             label={t('add_task')}
-            variant="default"
-            size="lg"
             onClick={() => navigate(location.pathname + '?newTask=true')}
           />
           {isManager(data.manager, user._id) && (
             <Button
-              icon={People}
+              Icon={UsersIcon}
               label={t('collaborators')}
               variant="neutral"
-              size="lg"
               onClick={() => navigate('team')}
             />
           )}
-        </div>
+        </nav>
       </div>
 
       <TasksList tasks={data.tasks} canEdit={canEdit}/>
@@ -74,6 +70,6 @@ export default function ProjectDetailsView() {
       <AddTaskModal />
       <EditTaskData />
       <TaskModalDetails />
-    </div>
+    </>
   )
 }

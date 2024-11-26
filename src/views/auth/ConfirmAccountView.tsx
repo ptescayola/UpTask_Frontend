@@ -4,22 +4,28 @@ import { useMutation } from '@tanstack/react-query'
 import { ConfirmToken } from '@/types/index'
 import { confirmAccount } from '@/api/AuthAPI'
 import { toast } from 'react-toastify'
-import Notification from '@/components/shared/Notification'
-import { Link } from '@factorialco/factorial-one'
+import { Notification } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import AuthHeader from '@/components/auth/AuthHeader'
+import AuthFooter from '@/components/auth/AuthFooter'
+import { ShieldCheckIcon } from '@heroicons/react/24/outline'
+import { RoutesEnum } from '@/constants/routes'
 
 export default function ConfirmAccountView() {
 
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [token, setToken] = useState<ConfirmToken['token']>('')
 
   const { mutate } = useMutation({
     mutationFn: confirmAccount,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {
       toast(<Notification variant="positive" title={data} />)
+      navigate(RoutesEnum.LOGIN)
     }
   })
 
@@ -28,28 +34,31 @@ export default function ConfirmAccountView() {
 
   return (
     <>
-      <h1 className="text-2xl text-f1-background-bold">{t('confirm_account')}</h1>
+      <div className="w-full max-w-[320px]">
 
-      <form className="space-y-2">
-        <label className="text-sm font-medium text-center block">
-          {t('6_digit_code')}
-        </label>
-        <div className="flex justify-center gap-2">
-          <PinInput value={token} onChange={handleChange} onComplete={handleComplete}>
-            <PinInputField className="w-8 h-8 p-1 rounded-sm border-f1-border border border-solid placeholder-f1-background text-center" />
-            <PinInputField className="w-8 h-8 p-1 rounded-sm border-f1-border border border-solid placeholder-f1-background text-center" />
-            <PinInputField className="w-8 h-8 p-1 rounded-sm border-f1-border border border-solid placeholder-f1-background text-center" />
-            <PinInputField className="w-8 h-8 p-1 rounded-sm border-f1-border border border-solid placeholder-f1-background text-center" />
-            <PinInputField className="w-8 h-8 p-1 rounded-sm border-f1-border border border-solid placeholder-f1-background text-center" />
-            <PinInputField className="w-8 h-8 p-1 rounded-sm border-f1-border border border-solid placeholder-f1-background text-center" />
-          </PinInput>
-        </div>
-      </form>
+        <AuthHeader
+          Icon={ShieldCheckIcon}
+          title={t('confirm_account')}
+          subtitle="[To define]"
+        />
 
-      <div className='text-center'>
-        <Link href={'/auth/request-code'}>
-          {t('request_new_code')}
-        </Link>
+        <form className="mx-auto mb-8 mt-4">
+          <div className="text-center text-sm text-gray-500 mb-4">
+            {t('6_digit_code')}
+          </div>
+          <div className="flex justify-center gap-2">
+            <PinInput value={token} onChange={handleChange} onComplete={handleComplete}>
+              <PinInputField className="w-12 h-16 p-2 rounded-sm border border-solid text-center" />
+              <PinInputField className="w-12 h-16 p-1 rounded-sm border border-solid text-center" />
+              <PinInputField className="w-12 h-16 p-1 rounded-sm border border-solid text-center" />
+              <PinInputField className="w-12 h-16 p-1 rounded-sm border border-solid text-center" />
+              <PinInputField className="w-12 h-16 p-1 rounded-sm border border-solid text-center" />
+              <PinInputField className="w-12 h-16 p-1 rounded-sm border border-solid text-center" />
+            </PinInput>
+          </div>
+        </form>
+
+        <AuthFooter />
       </div>
     </>
   )

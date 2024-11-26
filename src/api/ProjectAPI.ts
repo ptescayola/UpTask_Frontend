@@ -8,7 +8,7 @@ export async function createProject(formData: ProjectFormData) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -17,10 +17,11 @@ export async function getProjects() {
   try {
     const { data } = await api('/projects')
     const response = dashboardProjectSchema.safeParse(data)
+    console.log(response)
     return (response.success) ? response.data : []
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -34,7 +35,7 @@ export async function getProjectById(id: Project['_id']) {
     }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -48,7 +49,7 @@ export async function getFullProject(id: Project['_id']) {
     }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -64,7 +65,7 @@ export async function updateProject({formData, projectId} : ProjectAPIType ) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }
@@ -76,7 +77,7 @@ export async function deleteProject(id: Project['_id']) {
     return data
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.errors[0].msg)
+      throw new Error(error.response.data.error)
     }
   }
 }

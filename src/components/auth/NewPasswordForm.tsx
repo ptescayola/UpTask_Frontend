@@ -1,14 +1,14 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import type { ConfirmToken, NewPasswordForm } from '@/types/index'
-import ErrorMessage from '@/components/ErrorMessage'
 import { updatePasswordWithToken } from '@/api/AuthAPI'
 import { toast } from 'react-toastify'
-import Notification from '@/components/shared/Notification'
-import { Button } from '@factorialco/factorial-one'
-import { Input } from '@factorialco/factorial-one/dist/experimental'
+import { Notification, Input, Button, EvaluatePassword } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { RoutesEnum } from '@/constants/routes'
 
 type NewPasswordFormProps = {
   token: ConfirmToken['token']
@@ -27,12 +27,12 @@ export default function NewPasswordForm({token}: NewPasswordFormProps) {
   const { mutate } = useMutation({
     mutationFn: updatePasswordWithToken,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {
       toast(<Notification variant="positive" title={data} />)
       reset()
-      navigate('/auth/login')
+      navigate(RoutesEnum.LOGIN)
     }
   })
 
@@ -46,48 +46,58 @@ export default function NewPasswordForm({token}: NewPasswordFormProps) {
 
   const password = watch('password')
 
+  const [showPassword, setShowPassword] = useState<{ password: boolean; password_confirmation: boolean }>({
+    password: false,
+    password_confirmation: false,
+  })
+  const togglePasswordVisibility = (elem: 'password' | 'password_confirmation') => {
+    setShowPassword((prev) => ({...prev, [elem]: !prev[elem]}))
+  }
+
   return (
     <>
       <form
-        className="space-y-2"
+        className="mx-auto mb-0 mt-8"
         noValidate
       >
-        <div className="space-y-2">
         <Input
-            placeholder={t('password.label')}
-            type="password"
-            {...register("password", {
-              required: t('field.required'),
-              minLength: {
-                value: 8,
-                message: t('password.too_short')
-              }
-            })}
-          />
-          {errors.password && (<ErrorMessage>{errors.password.message}</ErrorMessage>)}
-        </div>
+          type={showPassword.password ? "text" : "password"}
+          label="Password"
+          RightIcon={!showPassword.password  ? EyeIcon : EyeSlashIcon}
+          onRightIconClick={() => togglePasswordVisibility('password')}
+          {...register("password", {
+            required: t('field.required'),
+            minLength: {
+              value: 8,
+              message: t('password.too_short')
+            }
+          })}
+          errors={errors.password}
+        />
 
-        <div className="space-y-2">
-          <Input
-            placeholder={t('repeat_password')}
-            type="password"
-            {...register("password_confirmation", {
-              required: t('field.required'),
-              validate: value => value === password || t('password.not_match')
-            })}
-          />
+        <EvaluatePassword password={password} />
 
-          {errors.password_confirmation && (<ErrorMessage>{errors.password_confirmation.message}</ErrorMessage>)}
-        </div>
+        <br/>
 
-        <div className='AuthButton'>
-          <Button
-            label={t('set_password')}
-            variant="default"
-            size="lg"
-            onClick={(e) => {e.preventDefault(); handleSubmit(handleNewPassword)()}}
-          />
-        </div>
+        <Input
+          type={showPassword.password_confirmation ? "text" : "password"}
+          RightIcon={!showPassword.password_confirmation  ? EyeIcon : EyeSlashIcon}
+          onRightIconClick={() => togglePasswordVisibility('password_confirmation')}
+          label="Password Confirmation"
+          {...register("password_confirmation", {
+            required: t('field.required'),
+            validate: value => value === password || t('password.not_match')
+          })}
+          errors={errors.password_confirmation}
+        />
+
+        <br/>
+  
+        <Button
+          label={t('reset_password')}
+          className="w-full"
+          onClick={handleSubmit(handleNewPassword)}
+        />
       </form>
     </>
   )

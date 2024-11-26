@@ -1,14 +1,15 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { UserLoginForm } from '@/types/index'
-import ErrorMessage from '@/components/ErrorMessage'
 import { authenticateUser } from '@/api/AuthAPI'
 import { toast } from 'react-toastify'
-import { Input } from '@factorialco/factorial-one/dist/experimental'
-import { Button, Link } from '@factorialco/factorial-one'
-import Notification from '@/components/shared/Notification'
 import { useTranslation } from 'react-i18next'
+import { Notification, Button, Input } from '@/components/shared'
+import { EyeIcon, EyeSlashIcon, FingerPrintIcon } from '@heroicons/react/24/outline'
+import AuthHeader from '@/components/auth/AuthHeader'
+import AuthFooter from '@/components/auth/AuthFooter'
 
 export default function LoginView() {
 
@@ -23,7 +24,7 @@ export default function LoginView() {
   const { mutate } = useMutation({
     mutationFn: authenticateUser,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: () => {
       navigate('/')
@@ -32,20 +33,25 @@ export default function LoginView() {
 
   const handleLogin = (formData: UserLoginForm) => mutate(formData)
 
+  const [showPassword, setShowPassword] = useState(false)
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev)
+
   return (
     <>
-      <h1 className="text-2xl text-f1-background-bold">
-        {t('login')}
-      </h1>
+      <div className="w-full max-w-[320px]">
 
-      <form
-        className="space-y-2"
-        noValidate
-      >
-        <div className="space-y-2">
+        <AuthHeader
+          Icon={FingerPrintIcon}
+          title={t('login')}
+        />
+
+        <form
+          className="mx-auto mb-0 mt-8"
+          noValidate
+        > 
           <Input
-            placeholder={t('email.label')}
             type="email"
+            label={t('email.label')}
             {...register("email", {
               required: t('field.required'),
               pattern: {
@@ -53,45 +59,38 @@ export default function LoginView() {
                 message: t('email.invalid'),
               }
             })}
+            errors={errors.email}
           />
 
-          {errors.email && (
-            <ErrorMessage>{errors.email.message}</ErrorMessage>
-          )}
-        </div>
+          <br />
 
-        <div className="space-y-2">
           <Input
-            placeholder={t('password.label')}
-            type="password"
+            type={showPassword ? "text" : "password"}
+            label={t('password.label')}
+            RightIcon={!showPassword  ? EyeIcon : EyeSlashIcon}
+            onRightIconClick={() => togglePasswordVisibility()}
             {...register("password", {
               required: t('field.required')
             })}
+            errors={errors.password}
           />
 
-          {errors.password && (
-            <ErrorMessage>{errors.password.message}</ErrorMessage>
-          )}
-        
-        <div className='text-right'>
-          <Link href='/auth/forgot-password'>
-            {t('forgot_password')}
-          </Link>
-        </div>
-        </div>
-        
-        <div className='AuthButton'>
+          <div className='text-right text-sm mt-2'>
+            <a onClick={() => navigate('/auth/forgot-password')}>
+              {t('forgot_password')}
+            </a>
+          </div>
+
+          <br />
+          
           <Button
             label={t('sign_in')}
-            variant="default"
-            size="lg"
-            onClick={(e) => {e.preventDefault(); handleSubmit(handleLogin)()}}
+            className="w-full"
+            onClick={handleSubmit(handleLogin)}
           />
-        </div>
-      </form>
-      
-      <div className="text-center">
-        {t('not_have_account')}<Link href='/auth/register'>{t('get_started')}</Link>
+
+          <AuthFooter />
+        </form>
       </div>
     </>
   )

@@ -4,12 +4,13 @@ import { useQuery } from '@tanstack/react-query'
 import { getProjectById } from '@/api/ProjectAPI'
 import EditProjectForm from '@/components/projects/EditProjectForm'
 import { useBreadcrumb } from '@/hooks/useBreadcrumb'
-import { Widget } from '@factorialco/factorial-one/dist/experimental'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 export default function EditProjectView() {
 
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { setBreadcrumbs } = useBreadcrumb()
 
   const params = useParams()
@@ -23,13 +24,13 @@ export default function EditProjectView() {
   useEffect(() => {
     if (data) {
       setBreadcrumbs([
-        { label: t('projects'), href: '/' },
+        { label: t('projects'), onClick: () => navigate('/')},
         { label: `${t('edit')} ${data.projectName}` }
       ])
     }
   }, [data, setBreadcrumbs])
 
-  if (isLoading) return <Widget.Skeleton />
+  if (isLoading) return (<p>Loading...</p>)
   if (isError) return <Navigate to='/404' />
   if (data) return <EditProjectForm data={data} projectId={projectId} />
 }

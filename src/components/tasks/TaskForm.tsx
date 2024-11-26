@@ -1,7 +1,6 @@
 import { FieldErrors, UseFormRegister } from 'react-hook-form'
 import { TaskFormData } from '@/types/index'
-import ErrorMessage from '@/components/ErrorMessage'
-import { Input, Textarea } from '@factorialco/factorial-one/dist/experimental'
+import { Input, Textarea } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
 
 type TaskFormProps = {
@@ -16,36 +15,24 @@ export default function TaskForm({errors, register} : TaskFormProps) {
   return (
     <>
       <div className="space-y-2">
-        <label className="text-sm font-semibold">
-            {t('task_name')}
-        </label>
         <Input
+          label={t('task_name')}
           placeholder={t('name')}
           type="text"
           {...register("name", {
-            required: t('field.required'),
+            required: t('field.required')
           })}
+          errors={errors.name}
         />
 
-        {errors.name && (
-          <ErrorMessage>{errors.name.message}</ErrorMessage>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-semibold">
-          {t('description')}
-        </label>
         <Textarea
+          label={t('description')}
           placeholder={t('description')}
           {...register("description", {
-              required: t('field.required'),
+            required: t('field.required')
           })}
+          errors={errors.description}
         />
-
-        {errors.description && (
-          <ErrorMessage>{errors.description.message}</ErrorMessage>
-        )}
       </div>
     </>
   )

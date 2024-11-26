@@ -1,8 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import AddMemberForm from '@/components/team/AddMemeberForm'
-import { Dialog } from '@factorialco/factorial-one/dist/experimental'
-import { People } from '@factorialco/factorial-one/icons/app'
 import { useTranslation } from 'react-i18next'
+import { Dialog, Button } from '@/components/shared'
+import { UsersIcon } from '@heroicons/react/24/outline'
 
 export default function AddMemberModal() {
 
@@ -12,21 +12,28 @@ export default function AddMemberModal() {
 
   const queryParams = new URLSearchParams(location.search)
   const addMember = queryParams.get('addMember')
-  const open = addMember ? true : false
+  const isOpen = addMember ? true : false
 
   return (
-    <>
-      <Dialog
-        open={open}
-        header={{
-          icon: People,
-          title: t('add_member'),
-          description: t('add_member_description')
-        }}
-        onClose={() => navigate(location.pathname, {replace: true}) }
-      >
+    <Dialog
+      isOpen={isOpen}
+      onClose={() => navigate(location.pathname, { replace: true })}
+      icon={<UsersIcon className="w-[24px] h-[24px] text-gray-600" />}
+      title={t('add_member')}
+      subtitle={t('add_member_description')}
+      content={
         <AddMemberForm />
-      </Dialog>
-    </>
+      }
+      actions={
+        <Button
+          label={t('cancel')}
+          variant="neutral"
+          onClick={(e) => {
+            e.preventDefault()
+            navigate(location.pathname, { replace: true })
+          }}
+        />
+      }
+    />
   )
 }

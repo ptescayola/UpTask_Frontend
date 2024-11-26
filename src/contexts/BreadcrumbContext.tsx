@@ -2,7 +2,7 @@ import { createContext, useState, ReactNode } from 'react'
 
 type Breadcrumb = {
   label: string
-  href?: string
+  onClick?: () => void
 }
 
 interface BreadcrumbContextType {

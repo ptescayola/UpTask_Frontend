@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { RoutesEnum } from '@/constants/routes'
 import AppLayout from '@/layouts/AppLayout'
 import DashboardView from '@/views/DashboardView'
 import CreateProjectView from '@/views/projects/CreateProjectView'
@@ -7,6 +8,7 @@ import EditProjectView from '@/views/projects/EditProjectView'
 import AuthLayout from '@/layouts/AuthLayout'
 import LoginView from '@/views/auth/LoginView'
 import RegisterView from '@/views/auth/RegisterView'
+import ConfirmEmailView from '@/views/auth/ConfirmEmailView'
 import ConfirmAccountView from '@/views/auth/ConfirmAccountView'
 import RequestNewCodeView from '@/views/auth/RequestNewCodeView'
 import ForgotPasswordView from '@/views/auth/ForgotPasswordView'
@@ -23,29 +25,28 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route element={<AppLayout />}>
-          <Route path='/' element={<DashboardView />} index />
-          <Route path='/projects/create' element={<CreateProjectView />} />
-          <Route path='/projects/:projectId' element={<ProjectDetailsView />} />
-          <Route path='/projects/:projectId/edit' element={<EditProjectView />} />
-          <Route path='/projects/:projectId/team' element={<ProjectTeamView />} />
+          <Route path={RoutesEnum.DASHBOARD} element={<DashboardView />} index />
+          <Route path={RoutesEnum.CREATE_PROJECT} element={<CreateProjectView />} />
+          <Route path={RoutesEnum.PROJECT_DETAILS} element={<ProjectDetailsView />} />
+          <Route path={RoutesEnum.EDIT_PROJECT} element={<EditProjectView />} />
+          <Route path={RoutesEnum.PROJECT_TEAM} element={<ProjectTeamView />} />
           <Route element={<ProfileLayout />}>
-            <Route path='/profile' element={<ProfileView />} />
-            <Route path='/profile/password' element={<ChangePasswordView />} />
+            <Route path={RoutesEnum.PROFILE} element={<ProfileView />} />
+            <Route path={RoutesEnum.CHANGE_PASSWORD} element={<ChangePasswordView />} />
           </Route>
         </Route>
 
         <Route element={<AuthLayout />}>
-          <Route path='/auth/login' element={<LoginView />} />
-          <Route path='/auth/register' element={<RegisterView />} />
-          <Route path='/auth/confirm-account' element={<ConfirmAccountView />} />
-          <Route path='/auth/request-code' element={<RequestNewCodeView />} />
-          <Route path='/auth/forgot-password' element={<ForgotPasswordView />} />
-          <Route path='/auth/new-password' element={<NewPasswordView />} />
+          <Route path={RoutesEnum.LOGIN} element={<LoginView />} />
+          <Route path={RoutesEnum.REGISTER} element={<RegisterView />} />
+          <Route path={RoutesEnum.CONFIRM_EMAIL} element={<ConfirmEmailView />} />
+          <Route path={RoutesEnum.CONFIRM_ACCOUNT} element={<ConfirmAccountView />} />
+          <Route path={RoutesEnum.REQUEST_CODE} element={<RequestNewCodeView />} />
+          <Route path={RoutesEnum.FORGOT_PASSWORD} element={<ForgotPasswordView />} />
+          <Route path={RoutesEnum.NEW_PASSWORD} element={<NewPasswordView />} />
         </Route>
 
-        <Route element={<AuthLayout />}>
-          <Route path='*' element={<NotFound />}  />
-        </Route>
+        <Route path={RoutesEnum.NOT_FOUND} element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

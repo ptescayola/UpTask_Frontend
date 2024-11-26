@@ -1,7 +1,6 @@
 import { UseFormRegister, FieldErrors } from 'react-hook-form'
-import ErrorMessage from '@/components/ErrorMessage'
 import { ProjectFormData } from 'types'
-import { Input, Textarea } from '@factorialco/factorial-one/dist/experimental'
+import { Input, Textarea } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
 
 type ProjectFormProps = {
@@ -16,69 +15,37 @@ export default function ProjectForm({errors, register} : ProjectFormProps) {
   return (
     <>
       <div className="space-y-2">
-        <label className="text-sm font-semibold">
-          {t('project_name')}
-        </label>
         <Input
-          placeholder={t('name')}
+          label={t('project_name')}
           type="text"
           {...register("projectName", {
               required: t('field.required'),
           })}
+          errors={errors.projectName}
         />
 
-        {errors.projectName && (
-          <ErrorMessage>{errors.projectName.message}</ErrorMessage>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-semibold">
-            {t('client_name')}
-        </label>
         <Input
-          placeholder={t('name')}
+          label={t('client_name')}
           type="text"
           {...register("clientName", {
               required: t('field.required'),
           })}
+          errors={errors.clientName}
         />
 
-        {errors.clientName && (
-          <ErrorMessage>{errors.clientName.message}</ErrorMessage>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-semibold">
-          {t('client_url')} ({t('optional')})
-        </label>
         <Input
-          placeholder={t('url')}
+          label={`${t('client_url')} (${t('optional')})`}
           type="text"
           {...register("clientUrl")}
+          errors={errors.clientUrl}
         />
 
-        {errors.clientName && (
-          <ErrorMessage>{errors.clientName.message}</ErrorMessage>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-semibold">
-          {t('project_description')} ({t('optional')})
-        </label>
         <Textarea
+          label={`${t('project_description')} (${t('optional')})`}
           placeholder={t('description')}
           {...register("description")}
+          errors={errors.description}
         />
-
-        {errors.description && (
-          <>
-            {{errors}}
-            <ErrorMessage>{errors.description.message}</ErrorMessage>
-          </>
-        )}
       </div>
     </>
   )

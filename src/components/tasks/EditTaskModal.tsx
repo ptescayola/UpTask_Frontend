@@ -1,5 +1,3 @@
-import { Dialog } from '@factorialco/factorial-one/dist/experimental'
-import { Pencil } from '@factorialco/factorial-one/icons/app'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Task, TaskFormData } from '@/types/index'
@@ -7,9 +5,9 @@ import { useForm } from 'react-hook-form'
 import TaskForm from '@/components/tasks/TaskForm'
 import { updateTask } from '@/api/TaskAPI'
 import { toast } from 'react-toastify'
-import Notification from '@/components/shared/Notification'
-import { Button } from '@factorialco/factorial-one'
 import { useTranslation } from 'react-i18next'
+import { Notification, Dialog, Button } from '@/components/shared'
+import { PencilIcon } from '@heroicons/react/24/outline'
 
 type EditTaskModalProps = {
   data: Task
@@ -33,7 +31,7 @@ export default function EditTaskModal({data, taskId} : EditTaskModalProps) {
   const { mutate } = useMutation({
     mutationFn: updateTask,
     onError: (error) => {
-      toast(<Notification variant="destructive" title={error.message} />)
+      toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({queryKey: ['project', projectId]})
@@ -51,32 +49,34 @@ export default function EditTaskModal({data, taskId} : EditTaskModalProps) {
 
   return (
     <Dialog
-      open={true}
-      header={
-        {
-          icon: Pencil,
-          title: t('edit_task'),
-          description: t('edit_task_description')
-        }
+      isOpen={true}
+      onClose={() => navigate(location.pathname, { replace: true })}
+      icon={<PencilIcon className="w-[24px] h-[24px] text-gray-600" />}
+      title={t('edit_task')}
+      subtitle={t('edit_task_description')}
+      content={
+        <TaskForm
+          register={register}
+          errors={errors}
+        />
       }
-      onClose={() => navigate(location.pathname, {replace: true}) }
-    >
-      <form
-        className='space-y-2'
-        noValidate
-      >
-        <TaskForm 
-            register={register}
-            errors={errors}
-        />
+      actions={
+        <>
+          <Button
+            label={t('update')}
+            onClick={(e) => {e.preventDefault(); handleSubmit(handleEditTask)()}}
+          />
 
-        <Button
-          label={t('update')}
-          variant="default"
-          size="lg"
-          onClick={(e) => {e.preventDefault(); handleSubmit(handleEditTask)()}}
-        />
-      </form>
-    </Dialog>
+          <Button
+            label={t('cancel')}
+            variant="neutral"
+            onClick={(e) => {
+              e.preventDefault()
+              navigate(location.pathname, { replace: true })
+            }}
+          />
+        </>
+      }
+    />
   )
 }
