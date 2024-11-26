@@ -30,8 +30,7 @@ export default function DeleteProjectModal() {
   const deleteProjectMutation = useMutation({
     mutationFn: deleteProject,
     onError: (error) => toast(<Notification variant="danger" title={error.message} />),
-    onSuccess: (data) => {
-      toast(<Notification variant="positive" title={data} />)
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] })
       navigate(location.pathname, { replace: true })
     }

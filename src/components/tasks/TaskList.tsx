@@ -27,11 +27,11 @@ const initialStatusGroups: GroupedTasks = {
 }
 
 const statusStyles: { [key: string]: string } = {
-  pending: 'f1-icon',
-  onHold: 'f1-icon-critical',
-  inProgress: 'f1-icon-info',
-  underReview: 'f1-icon-warning',
-  completed: 'f1-icon-positive'
+  pending: 'bg-gray-300',
+  onHold: 'bg-red-400',
+  inProgress: 'bg-blue-400',
+  underReview: 'bg-yellow-300',
+  completed: 'bg-green-400'
 }
 
 export default function TaskList({ tasks, canEdit }: TaskListProps) {
@@ -83,21 +83,20 @@ export default function TaskList({ tasks, canEdit }: TaskListProps) {
   }
 
   return (
-    <div className='flex space-x-4 gap-4'>
+    <div className='flex space-x-2 overflow-x-auto'>
       <DndContext onDragEnd={handleDragEnd} >
         {Object.entries(groupedTasks).map(([status, tasks]) => (
-          <div key={status} className="flex-1" style={{ minWidth: '200px' }}>
-            <div className='space-y-4'>
-              <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 bg-${statusStyles[status]} rounded-full`}></div>
-                <h1 className="text-lg font-bold">{statusTranslations[status]}</h1>
-                <Badge text={tasks.length.toString()} />
-              </div>
-              {tasks.map(task => <TaskCard key={task._id} task={task} canEdit={canEdit}/>)}
-              <DropTask status={status} />
+          <div key={status} className="flex-1 min-w-[250px] bg-stone-100 p-1 space-y-2">
+            <div className="flex items-center space-x-2 p-2">
+              <div className={`w-2 h-2 ${statusStyles[status]} rounded-full`}></div>
+              <h1 className="text-sm font-semibold uppercase text-gray-600">{statusTranslations[status]}</h1>
+              <Badge text={tasks.length.toString()} variant="white"/>
             </div>
+            {tasks.map(task => <TaskCard key={task._id} task={task} canEdit={canEdit}/>)}
+            <DropTask status={status} />
           </div>
         ))}
+        
       </DndContext>
     </div>
   )

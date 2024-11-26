@@ -33,7 +33,7 @@ export function formatDate(isoString: string): string {
   const date = new Date(isoString);
   const formatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
-    month: 'short',
+    month: 'numeric',
     day: 'numeric'
   })
   return formatter.format(date)

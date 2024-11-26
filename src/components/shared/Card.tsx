@@ -1,6 +1,6 @@
 type CardProps = {
   title?: string
-  statusTag?: React.ReactNode
+  header?: React.ReactNode
   content: React.ReactNode
   actions?: React.ReactNode
   onClick?: (
@@ -8,23 +8,19 @@ type CardProps = {
   ) => void | Promise<unknown>
 }
 
-export const Card = ({title, statusTag, content, actions, onClick}: CardProps) => {
+export const Card = ({title, header, content, actions, onClick}: CardProps) => {
   return (
     
     <div
-      className="flex-col items-stretch rounded-xl border bg-f1-background p-4 relative flex gap-2 border-f1-border hover:shadow-md duration-200 cursor-pointer"
+      className="bg-white p-4 relative border rounded-xl border-stone-100 hover:shadow-md duration-200 cursor-pointer"
       onClick={onClick}
     >
-      <div className="flex flex-1 flex-row flex-nowrap items-start justify-between gap-2 ">
-        <div className="flex min-h-6 grow flex-row items-center gap-1">
-          <h3 className="text-lg font-medium sm:text-xl">{title}</h3>
-          {statusTag}
-        </div>
-        <div className="flex flex-row items-center gap-3">{actions}</div>
+      <div className="flex justify-between items-center mb-3 gap-3">
+        {header}
+        {actions}
       </div>
-      {content && (
-        <div className="mt-1 text-sm text-gray-700">{content}</div>
-      )}
+      <h3 className="text-lg font-medium sm:text-xl mb-3">{title}</h3>
+      {content && (<div className="mt-1 text-sm text-gray-700">{content}</div>)}
     </div>
   )
 }

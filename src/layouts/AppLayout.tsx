@@ -29,7 +29,7 @@ export default function AppLayout() {
       />
 
       <footer className='mx-auto max-w-screen-xl pb-4'>
-        <div className="text-sm text-gray-500 px-4 mt-6 border-t border-gray-100 pt-4 sm:flex sm:items-center sm:justify-between lg:mt-6">
+        <div className="text-xs text-gray-400 px-4 mt-6 border-t border-gray-100 pt-4 sm:flex sm:items-center sm:justify-between lg:mt-6">
           <p>{t('company.author')} · {t('company.email')}</p>
           <p>© {new Date().getFullYear()}</p>
         </div>

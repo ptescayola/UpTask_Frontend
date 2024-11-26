@@ -30,7 +30,6 @@ export default function AddTaskModal() {
   const { mutate } = useMutation({
     mutationFn: createTask,
     onError: (error) => {
-      console.log(error)
       toast(<Notification variant="danger" title={error.message} />)
     },
     onSuccess: (data) => {

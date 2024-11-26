@@ -1,5 +1,6 @@
 import { useDroppable } from '@dnd-kit/core'
 import { useTranslation } from 'react-i18next'
+import clsx from 'clsx'
 
 type DropTaskProps = {
   status: string
@@ -8,21 +9,22 @@ type DropTaskProps = {
 export default function DropTask({status} : DropTaskProps) {
 
   const { t } = useTranslation()
-  const { isOver, setNodeRef } = useDroppable({
+  const { active, isOver, setNodeRef } = useDroppable({
     id: status
   })
 
-  const style = {
-    opacity: isOver ? 0.4 : undefined
-  }
-
   return (
     <div
-      style={style}
       ref={setNodeRef}
-      className="flex place-content-center items-center justify-center rounded-md border-2 border-dashed border-f1-border bg-f1-background p-6"
+      className={clsx(
+        'flex place-content-center items-center justify-center p-6 opacity-0 border-2 border-dashed rounded-xl text-gray-400 bg-gray-50 h-[150px]',
+        {
+          'opacity-100': active,
+          'text-blue-400 border-blue-500': isOver
+        }
+      )}
     >
-      <div className='mt-4 max-w-md text-gray-500'>
+      <div className='max-w-md'>
         {t('drop_here')}
       </div>
     </div>

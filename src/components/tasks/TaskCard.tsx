@@ -16,12 +16,11 @@ type TaskCardProps = {
 
 export default function TaskCard({ task, canEdit }: TaskCardProps) {
 
-  const [isActionsHovered, setIsActionsHovered] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setisHovered] = useState(false)
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task._id,
-    disabled: isActionsHovered
+    disabled: isHovered
   })
 
   const navigate = useNavigate()
@@ -52,41 +51,35 @@ export default function TaskCard({ task, canEdit }: TaskCardProps) {
         {...listeners}
         {...attributes}
         style={style}
-        onMouseEnter={() => setIsHovered(true)} 
-        onMouseLeave={() => setIsHovered(false)}
       >
         <Card
+          header={<Badge text={formatDate(task.createdAt)} />}
           title={task.name}
           content={
             <>
-              <Badge text={formatDate(task.createdAt)} />
               <p className='mt-2'>{task.description}</p>
             </>
           }
           actions={
-            isHovered && (
-              <div className='absolute top-[10px] right-[10px]'>
-                <ButtonGroup
-                  onMouseEnter={() => setIsActionsHovered(true)}
-                  onMouseLeave={() => setIsActionsHovered(false)}
-                  size="sm"
-                  items={[
-                    {
-                      Icon: EyeIcon,
-                      onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(location.pathname + `?viewTask=${task._id}`)}
-                    },
-                    canEdit && {
-                      Icon: PencilIcon,
-                      onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(location.pathname + `?editTask=${task._id}`)}
-                    },
-                    canEdit && {
-                      Icon: TrashIcon,
-                      onClick: (e: React.MouseEvent) => {e.stopPropagation(); mutate({ projectId, taskId: task._id })}
-                    }
-                  ].filter(Boolean as unknown as ExcludesNullish)}
-                />
-              </div>
-            )
+            <ButtonGroup
+              onMouseEnter={() => setisHovered(true)}
+              onMouseLeave={() => setisHovered(false)}
+              size="sm"
+              items={[
+                {
+                  Icon: EyeIcon,
+                  onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(location.pathname + `?viewTask=${task._id}`)}
+                },
+                canEdit && {
+                  Icon: PencilIcon,
+                  onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(location.pathname + `?editTask=${task._id}`)}
+                },
+                canEdit && {
+                  Icon: TrashIcon,
+                  onClick: (e: React.MouseEvent) => {e.stopPropagation(); mutate({ projectId, taskId: task._id })}
+                }
+              ].filter(Boolean as unknown as ExcludesNullish)}
+            />
           }
         />
       </div>
