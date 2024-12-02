@@ -4,7 +4,6 @@ import { addUserToProject } from '@/api/TeamAPI'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Notification } from '@/components/shared'
-import { Button } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
 
 type SearchResultProps = {
@@ -43,13 +42,13 @@ export default function SearchResult({ user, reset }: SearchResultProps) {
 
   return (
     <>
-      <p className="mt-10 text-center font-bold">{t('result')}:</p>
       <div className="flex justify-between items-center">
         <p>{user.name}</p>
-        <Button
-          label={t('add_to_project')}
+        <a
           onClick={handleAddUserToProject}
-        />
+        >
+          {t('add_to_project')}
+        </a>
       </div>
     </>
   )

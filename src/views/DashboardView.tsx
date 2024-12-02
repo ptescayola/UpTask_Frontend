@@ -55,7 +55,7 @@ export default function DashboardView() {
             content={
               <>
                 { project.description && (
-                  <p className="text-lg mt-4">
+                  <p className="text-sm mb-4">
                     {project.description}
                   </p>
                 )}
@@ -88,7 +88,7 @@ export default function DashboardView() {
         ))}
 
         <div
-          className="flex place-content-center items-center justify-center rounded-md border-2 border-dashed border-gray-200 hover:border-blue-700 bg-stone-50 text-gray-400 hover:text-blue-600 p-6 h-[180px] cursor-pointer"
+          className="flex place-content-center items-center justify-center rounded-md border-2 border-dashed border-gray-200 hover:border-blue-300 bg-stone-50 text-gray-500 hover:text-blue-600 p-6 h-[180px] cursor-pointer h-full"
           onClick={() => navigate('/projects/create')}
         >
           <div className='max-w-m'>

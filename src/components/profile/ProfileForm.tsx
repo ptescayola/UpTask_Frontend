@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { Notification } from '@/components/shared'
 import { Input, Button } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
+import ProfileImageUploader from './ProfileImageUploader'
 
 type ProfileFormProps = {
   data: User
@@ -37,6 +38,8 @@ export default function ProfileForm({ data }: ProfileFormProps) {
         <form
           noValidate
         >
+          <ProfileImageUploader user={data} />
+
           <Input
             label={t('name')}
             placeholder={t('name')}

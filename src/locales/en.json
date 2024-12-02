@@ -119,9 +119,8 @@
   "updated_at": "Updated {{date}}",
   "add_task": "Add task",
   "add_member": "Add new team member",
-  "add_member_description": "Fill out the form and add a team membe",
+  "add_member_description": "Fill out the form and add a team member",
   "find_user": "Find user",
-  "result": "Result",
   "add_to_project": "Add to project",
   "security": "Security",
   "collaborators": "Collaborators",
@@ -147,5 +146,6 @@
     "second_plural": "seconds"
   },
   "back to": "Back to",
-  "page_not_found": "404 Page Not found"
+  "page_not_found": "404 Page Not found",
+  "change": "Change"
 }

@@ -27,7 +27,8 @@ export const userSchema = authSchema.pick({
   lastname: true,
   email: true
 }).extend({
-  _id: z.string()
+  _id: z.string(),
+  profileImage: z.string().nullable()
 })
 export type User = z.infer<typeof userSchema>
 export type UserProfileForm = Pick<User, 'name' | 'lastname' | 'email'>
@@ -110,6 +111,7 @@ export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'clie
 /** Team */
 const teamMemberSchema = userSchema.pick({
   name: true,
+  lastname: true,
   email: true,
   _id: true
 })

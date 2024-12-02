@@ -7,6 +7,7 @@ import type { TeamMember } from '@/types/index'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { Notification, Card, Button } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
+import { Avatar } from '@/components/shared'
 
 export default function ProjectTeamView() {
 
@@ -60,9 +61,14 @@ export default function ProjectTeamView() {
         data?.map((member: TeamMember) => (
           <Card
             key={member._id}
-            title={member.name}
-            content={
-              <p>{member.email}</p>
+            header={
+              <div className='flex place-items-center gap-4'>
+                <Avatar firstName={member.name} lastName={member.lastname} />
+                <div>
+                  {member.name} {member.lastname}
+                  <p className='text-gray-500'>{member.email}</p>
+                </div>
+              </div>
             }
             actions={
               <Button

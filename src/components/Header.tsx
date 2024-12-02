@@ -43,7 +43,7 @@ export default function Header({user}: HeaderProps) {
             >
               <MenuButton>
                 <div className="hidden md:relative md:block">
-                  <Avatar firstName={user.name} lastName={user.lastname} />
+                  <Avatar firstName={user.name} lastName={user.lastname} image={user.profileImage} />
                 </div>
               </MenuButton>
               <Transition
