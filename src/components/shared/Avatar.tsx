@@ -1,11 +1,18 @@
 type AvatarProps = {
-  firstName: string
-  lastName: string
+  firstName?: string
+  lastName?: string
   image?: string | null
   size?: 'sm' | 'md' | 'lg'
+  className?: string
 }
 
-export const Avatar = ({firstName, lastName, image, size = 'md'}: AvatarProps) => {
+export const Avatar = ({
+  firstName,
+  lastName,
+  image,
+  size = 'md',
+  className
+}: AvatarProps) => {
   const initials = `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase()
   
   const sizeClasses = {
@@ -16,7 +23,7 @@ export const Avatar = ({firstName, lastName, image, size = 'md'}: AvatarProps) =
 
   return (
     <div
-      className={`overflow-hidden rounded-full border border-gray-300 bg-white text-blue-500 shadow-inner ${sizeClasses[size]}`}
+      className={`overflow-hidden rounded-full border border-gray-300 bg-white text-blue-500 shadow-inner ${sizeClasses[size]} ${className}`}
     >
       {image ? (
         <img 

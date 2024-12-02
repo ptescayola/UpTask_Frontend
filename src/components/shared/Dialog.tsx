@@ -1,5 +1,6 @@
 import { Dialog as HeadlessDialog, DialogPanel } from '@headlessui/react'
 import clsx from 'clsx'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 type DialogProps = {
   isOpen: boolean
@@ -8,6 +9,7 @@ type DialogProps = {
   subtitle?: string
   content?: React.ReactNode
   actions?: React.ReactNode
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
   onClose: () => void
 }
 
@@ -18,6 +20,7 @@ export const Dialog = ({
   subtitle,
   content,
   actions,
+  size= 'md',
   onClose
 }: DialogProps) => {
   return (
@@ -36,10 +39,18 @@ export const Dialog = ({
           <DialogPanel
             transition
             className={clsx(
-              'relative w-full max-w-md block rounded-lg shadow-xl shadow-gray-400 bg-white p-6',
+              `relative w-full max-w-${size} block rounded-lg shadow-xl shadow-gray-400 bg-white p-6`,
               'transition-all duration-800 ease-out data-[enter]:-translate-y-5 data-[closed]:-translate-y-15 data-[leave]:-translate-y-10 data-[enter]:opacity-0 data-[closed]:opacity-0'
             )}
           >
+            <button
+              onClick={onClose}
+              className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label="Cerrar diálogo"
+            >
+              <XMarkIcon className='w-[18px] h-[18px]' />
+            </button>
+
             {icon && (
               <div className="absolute -top-[24px]">
                 <div className="w-[54px] h-[54px] shadow-sm shadow-gray-300 bg-white rounded-lg flex items-center justify-center mx-auto">

@@ -59,9 +59,9 @@ export const taskSchema = z.object({
     user: userSchema,
     status: taskStatusSchema
   })),
-  // notes: z.array(noteSchema.extend({
-  //     createdBy: userSchema
-  // })),
+  notes: z.array(noteSchema.extend({
+    createdBy: userSchema
+  })),
   createdAt: z.string(),
   updatedAt: z.string()
 })

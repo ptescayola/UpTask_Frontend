@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getProjects } from '@/api/ProjectAPI'
 import { Card, Badge, ButtonGroup } from '@/components/shared'
+import { ProjectCardSkeleton } from '@/components/shared/Skeleton'
 import { useBreadcrumb } from '@/hooks/useBreadcrumb'
 import { useAuth } from '@/hooks/useAuth'
 import { isManager } from '@/utils/policies'
@@ -27,8 +28,7 @@ export default function DashboardView() {
     queryFn: getProjects
   })
 
-  if (isLoading && authLoading) return (<p>Loading...</p>)
-  if (data && user) return (
+  return (
     <>
       <div className='flex justify-between mb-6'>
         <div>
@@ -41,64 +41,76 @@ export default function DashboardView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data.map((project) => (
-          <Card
-            key={project._id}
-            title={project.projectName}
-            header={
-              <Badge
-                text={project.clientName}
-                onClick={(e: React.MouseEvent) => {e.stopPropagation(); window.open(project.clientUrl, '_blank', 'noopener,noreferrer')}}
-              />
-            }
-            content={
-              <>
-                { project.description && (
-                  <p className="text-sm mb-4">
-                    {project.description}
-                  </p>
-                )}
-
-                {
-                  isManager(project.manager, user._id)
-                    ? <Badge text={t('manager')} variant="purple" />
-                    : <Badge text={t('collaborator')} variant="orange" />
-                }
-              </>
-            }
-            actions={
-              <ButtonGroup items={[
-                {
-                  Icon: EyeIcon,
-                  onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(`/projects/${project._id}`)}
-                },
-                isManager(project.manager, user._id) && {
-                  Icon: PencilIcon,
-                  onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(`/projects/${project._id}/edit`)}
-                },
-                isManager(project.manager, user._id) && {
-                  Icon: TrashIcon,
-                  onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(location.pathname + `?deleteProject=${project._id}`)}
-                }
-              ].filter(Boolean as unknown as ExcludesNullish)} />
-            }
-            onClick={() => navigate(`/projects/${project._id}`)}
-          />
-        ))}
-
-        <div
-          className="flex place-content-center items-center justify-center rounded-md border-2 border-dashed border-gray-200 hover:border-blue-300 bg-stone-50 text-gray-500 hover:text-blue-600 p-6 h-[180px] cursor-pointer h-full"
-          onClick={() => navigate('/projects/create')}
-        >
-          <div className='max-w-m'>
-            <PlusCircleIcon className='h-[24px] w-[24px] m-auto' />
-            {t('create_new_project')}
-          </div>
+      {isLoading || authLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map((n) => (
+            <ProjectCardSkeleton key={n} />
+          ))}
         </div>
-      </div>
+      ) : data && user ? (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data.map((project) => (
+              <Card
+                key={project._id}
+                title={project.projectName}
+                header={
+                  <Badge
+                    text={project.clientName}
+                    onClick={(e: React.MouseEvent) => {e.stopPropagation(); window.open(project.clientUrl, '_blank', 'noopener,noreferrer')}}
+                  />
+                }
+                content={
+                  <>
+                    { project.description && (
+                      <p className="text-sm mb-4">
+                        {project.description}
+                      </p>
+                    )}
 
-      <DeleteProjectModal />
+                    {
+                      isManager(project.manager, user._id)
+                        ? <Badge text={t('manager')} variant="purple" />
+                        : <Badge text={t('collaborator')} variant="orange" />
+                    }
+                  </>
+                }
+                actions={
+                  <ButtonGroup items={[
+                    {
+                      Icon: EyeIcon,
+                      onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(`/projects/${project._id}`)}
+                    },
+                    isManager(project.manager, user._id) && {
+                      Icon: PencilIcon,
+                      onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(`/projects/${project._id}/edit`)}
+                    },
+                    isManager(project.manager, user._id) && {
+                      Icon: TrashIcon,
+                      onClick: (e: React.MouseEvent) => {e.stopPropagation(); navigate(location.pathname + `?deleteProject=${project._id}`)}
+                    }
+                  ].filter(Boolean as unknown as ExcludesNullish)} />
+                }
+                onClick={() => navigate(`/projects/${project._id}`)}
+              />
+            ))}
+
+            <div
+              className="flex place-content-center items-center justify-center rounded-md border-2 border-dashed border-gray-200 hover:border-blue-300 bg-stone-50 text-gray-500 hover:text-blue-600 p-6 h-[180px] cursor-pointer h-full"
+              onClick={() => navigate('/projects/create')}
+            >
+              <div className='max-w-m'>
+                <PlusCircleIcon className='h-[24px] w-[24px] m-auto' />
+                {t('create_new_project')}
+              </div>
+            </div>
+          </div>
+
+          <DeleteProjectModal />
+        </>
+      ) : (
+        <p className="text-gray-500">{t('no_projects_found')}</p>
+      )}
     </>
   )
 }

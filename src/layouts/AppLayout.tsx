@@ -8,13 +8,13 @@ import { useTranslation } from 'react-i18next'
 export default function AppLayout() {
 
   const { t } = useTranslation()
-  const { data, isError, isLoading } = useAuth()
+  const { data: user, isError, isLoading } = useAuth()
   if (isLoading) return (<p>Loading...</p>)
   if (isError) return <Navigate to='/auth/login' />
 
-  if (data) return (
+  if (user) return (
     <div className="page-wrapper">
-      <Header user={data} />
+      <Header user={user} />
 
       <div className='mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-6 lg:px-8 bg-white'>
         <Outlet />
