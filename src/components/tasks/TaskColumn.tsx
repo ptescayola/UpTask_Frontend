@@ -65,7 +65,7 @@ export default function TaskColumn({ status, tasks, canEdit }: TaskColumnProps) 
       {canEdit && shouldShowButton && (
         <div className="mt-2 px-2">
           <button
-            onClick={() => navigate(location.pathname + '?newTask=true')}
+            onClick={() => navigate(location.pathname + `?newTask=true&status=${status}`)}
             className={clsx(
               'w-full group p-2 flex items-center justify-center gap-2',
               'text-sm text-gray-500 hover:text-gray-900',

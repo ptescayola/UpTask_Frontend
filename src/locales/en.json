@@ -149,5 +149,15 @@
   },
   "back to": "Back to",
   "page_not_found": "404 Page Not found",
-  "change": "Change"
+  "change": "Change",
+  "welcome_to_uptask": "Welcome to Up Task",
+  "account_agreement": "By creating an account, you agree to our",
+  "terms_and_conditions": "terms and conditions",
+  "privacy_policy": "privacy policy",
+  "marketing_consent": "I want to receive emails about events, product updates and company announcements",
+  "create_account_button": "Create an account",
+  "forgot_password_title": "Forgot password?",
+  "forgot_password_subtitle": "No worries, we'll send you reset instructions",
+  "set_new_password": "Set new password",
+  "password_min_length": "Must be at least 8 characters"
 }

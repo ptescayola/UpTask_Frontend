@@ -9,9 +9,11 @@ import { ConfirmToken } from '@/types/index'
 import { LockClosedIcon } from '@heroicons/react/24/outline'
 import AuthHeader from '@/components/auth/AuthHeader'
 import AuthFooter from '@/components/auth/AuthFooter'
+import { useTranslation } from 'react-i18next'
 
 export default function NewPasswordView() {
 
+  const { t } = useTranslation()
   const [searchParams] = useSearchParams()
 
   const token = searchParams.get('token') as ConfirmToken['token']
@@ -34,8 +36,8 @@ export default function NewPasswordView() {
       <div className="w-full max-w-[320px]">
         <AuthHeader
           Icon={LockClosedIcon}
-          title="Set new password"
-          subtitle="Must be at least 8 characters."
+          title={t('set_new_password')}
+          subtitle={t('password_min_length')}
         />
 
         <NewPasswordForm token={token} />

@@ -55,7 +55,7 @@ export default function RegisterView() {
 
         <AuthHeader
           Icon={RocketLaunchIcon}
-          title="Welcome to Up Task"
+          title={t('welcome_to_uptask')}
           subtitle={t('create_account')}
         />
 
@@ -140,23 +140,23 @@ export default function RegisterView() {
               />
 
               <span className="text-sm text-gray-700">
-                I want to receive emails about events, product updates and company announcements.
+                {t('marketing_consent')}
               </span>
             </label>
           </div>
 
           <div className="col-span-6">
             <p className="text-sm text-gray-500">
-              By creating an account, you agree to our {' '}
-              <a href="#" className="text-gray-700 underline">terms and conditions</a>
+              {t('account_agreement')} {' '}
+              <a href="#" className="text-gray-700 underline">{t('terms_and_conditions') }</a>
               {' '} and  {' '}
-              <a href="#" className="text-gray-700 underline">privacy policy</a>.
+              <a href="#" className="text-gray-700 underline">{t('privacy_policy')}</a>.
             </p>
           </div>
 
           <div className="col-span-6">
             <Button
-              label='Create an account'
+              label={t('create_account_button')}
               onClick={handleSubmit(handleRegister)}
               className="w-full"
             />

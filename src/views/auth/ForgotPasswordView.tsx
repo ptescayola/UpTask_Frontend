@@ -36,8 +36,8 @@ export default function ForgotPasswordView() {
 
         <AuthHeader
           Icon={LockClosedIcon}
-          title="Forgot password?"
-          subtitle="No worries, we'll send you reset instructions."
+          title={t('forgot_password_title')}
+          subtitle={t('forgot_password_subtitle')}
         />
 
         <form
@@ -60,7 +60,7 @@ export default function ForgotPasswordView() {
           <br/>
 
           <Button
-            label="Reset password"
+            label={t('reset_password')}
             className="w-full"
             onClick={handleSubmit(handleForgotPassword)}
           />
