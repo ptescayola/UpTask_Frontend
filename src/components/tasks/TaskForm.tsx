@@ -33,6 +33,11 @@ export default function TaskForm({errors, register} : TaskFormProps) {
           })}
           errors={errors.description}
         />
+
+        <input
+          type="hidden"
+          {...register("status")}
+        />
       </div>
     </>
   )

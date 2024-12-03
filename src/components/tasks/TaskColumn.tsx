@@ -62,8 +62,12 @@ export default function TaskColumn({ status, tasks, canEdit }: TaskColumnProps) 
         ))}
       </div>
 
-      {canEdit && shouldShowButton && (
-        <div className="mt-2 px-2">
+      {canEdit && (
+        <div className={clsx(
+          'mt-2 px-2',
+          !shouldShowButton && 'invisible'
+        )}
+        >
           <button
             onClick={() => navigate(location.pathname + `?newTask=true&status=${status}`)}
             className={clsx(

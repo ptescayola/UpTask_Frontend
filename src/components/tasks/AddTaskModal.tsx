@@ -1,13 +1,14 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import TaskForm from '@/components/tasks/TaskForm'
 import { useForm } from 'react-hook-form'
-import { TaskFormData } from '@/types/index'
+import { TaskFormData, TaskStatus } from '@/types/index'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createTask } from '@/api/TaskAPI'
 import { toast } from 'react-toastify'
 import { Notification, Button, Dialog } from '@/components/shared'
 import { useTranslation } from 'react-i18next'
 import { PencilIcon } from '@heroicons/react/24/outline'
+import { useEffect } from 'react'
 
 export default function AddTaskModal() {
   const { t } = useTranslation()
@@ -16,15 +17,25 @@ export default function AddTaskModal() {
   const queryParams = new URLSearchParams(location.search)
   const modalTask = queryParams.get('newTask')
   const isOpen = modalTask ? true : false
+  const initialStatus = queryParams.get('status') as TaskStatus
 
   const params = useParams()
   const projectId = params.projectId!
 
   const initialValues : TaskFormData = {
     name: '',
-    description: ''
+    description: '',
+    status: initialStatus || 'pending'
   }
   const { register, handleSubmit, reset, formState: {errors}  } = useForm({defaultValues: initialValues})
+
+  useEffect(() => {
+    reset({
+      name: '',
+      description: '',
+      status: initialStatus || 'pending'
+    })
+  }, [initialStatus, reset])
 
   const queryClient = useQueryClient() 
   const { mutate } = useMutation({
